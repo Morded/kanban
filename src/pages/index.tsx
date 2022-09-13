@@ -55,10 +55,10 @@ type NavButtonProps = {
 const NavButton = ({ label, icon }: NavButtonProps) => {
   return (
     <li className="flex gap-3 items-center" >
-      <a className="p-3 bg-gray-700 rounded-full text-2xl hover:bg-gray-600 hover:rounded-xl peer" href="#">
+      <a className="btn peer" href="#">
         {React.createElement(icon)}
       </a>
-      <span className="opacity-0 peer-hover:opacity-100">{label}</span>
+      <span className="opacity-0 translate-x-[-2rem] peer-hover:opacity-100 peer-hover:translate-x-0 transition-all duration-500 ease-in-out">{label}</span>
 
     </li>
   )
