@@ -4,8 +4,24 @@ import { trpc } from "../utils/trpc";
 import { FiLogIn, FiUser } from "react-icons/fi";
 import { IconType } from "react-icons";
 import React from "react"
+import { useSession, signIn, signOut } from "next-auth/react"
+
+export function Component() {
+}
 
 const Home: NextPage = () => {
+  // const { data: session } = useSession()
+  // if (session) {
+  //   return <>
+  //     Signed in as {session.user.email} <br />
+  //     <button onClick={() => signOut()}>Sign out</button>
+  //   </>
+  // }
+  // return <>
+  //   Not signed in <br />
+  //   <button onClick={() => signIn()}>Sign in</button>
+  // </>
+
   return (
     <>
       <Head>
