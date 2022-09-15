@@ -6,8 +6,12 @@ import { Form, Button, Input } from "../components/form"
 export function Component() {
 }
 
-const Login: NextPage = () => {
+const Register: NextPage = () => {
   const session = useSession()
+
+  const signUp = () => {
+    console.log("TEST")
+  }
   // if (session) {
   //   return <>
   //     Signed in as {session.user.email} <br />
@@ -16,7 +20,7 @@ const Login: NextPage = () => {
   // }
   return (
     <>
-      <Form header="Sign in">
+      <Form header="Sign up">
         <Input
           label="Username"
           type="text"
@@ -25,14 +29,18 @@ const Login: NextPage = () => {
           label="Password"
           type="password"
         />
+        <Input
+          label="Verify Password"
+          type="password"
+        />
 
         <div className="p-4"></div>
         <Button
-          onClick={() => signIn()}
-          text="Sign in"
-          otherText="Don't have an account yet?"
-          otherLink="/register"
-          otherLinkText="Sign up"
+          onClick={() => signUp()}
+          text="Sign up"
+          otherText="Already have an account?"
+          otherLink="/login"
+          otherLinkText="Sign in"
         />
 
       </Form>
@@ -40,5 +48,5 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default Register;
 
