@@ -7,14 +7,18 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
+import Layout from "../components/layouts/main"
 
 const MyApp: AppType = ({
   Component,
   pageProps: { session, ...pageProps },
+  router
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <Layout router={router}>
+        <Component {...pageProps} key={router.route} />
+      </Layout>
     </SessionProvider>
   );
 };
@@ -66,5 +70,5 @@ export default withTRPC<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    */
-  ssr: false,
+  ssr: true,
 })(MyApp);
