@@ -30,8 +30,8 @@ const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink
       return (
         <div className="text-center text-gray-200 pt-2">
           <p>{otherText}
-            <Link className="text-yellow-200" href={`${otherLink}`}>
-              <a> {otherLinkText}</a>
+            <Link href={`${otherLink}`}>
+              <a className="text-yellow-200"> {otherLinkText}</a>
             </Link>
           </p>
         </div>

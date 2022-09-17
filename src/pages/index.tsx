@@ -22,13 +22,13 @@ const Home: NextPage = () => {
         <div className="p-5"></div>
       </Navigation>
       <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-white">
-        Morded Kanban Test
+        Morded Kanban
       </h1>
       <p className="text-2xl text-gray-100">An excellent way to track your tasks</p>
 
       <div className="p-6"></div>
 
-      <Link href="/register" className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl"><a>Get started</a></Link>
+      <Link href="/register"><a className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl">Get started</a></Link>
 
       <div className="p-6 text-sm text-gray-300 absolute text-center bottom-0 w-full">
         This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>
