@@ -22,7 +22,7 @@ const Home: NextPage = () => {
         <div className="p-5"></div>
       </Navigation>
       <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-white">
-        Morded Kanban
+        Morded Kanban Test
       </h1>
       <p className="text-2xl text-gray-100">An excellent way to track your tasks</p>
 
