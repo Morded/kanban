@@ -2,9 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 import { FiLogIn, FiUser } from "react-icons/fi";
 import { Navigation, NavButton } from "../components/nav"
-
-export function Component() {
-}
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -30,7 +28,7 @@ const Home: NextPage = () => {
 
       <div className="p-6"></div>
 
-      <a href="/register" className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl">Get started</a>
+      <Link href="/register" className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl"><a>Get started</a></Link>
 
       <div className="p-6 text-sm text-gray-300 absolute text-center bottom-0 w-full">
         This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>

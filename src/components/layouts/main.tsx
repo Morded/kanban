@@ -1,6 +1,13 @@
 import Head from "next/head";
+import { NextRouter } from "next/router";
+import React from 'react';
 
-const Main = ({ children, router }) => {
+type MainProps = {
+  children: React.ReactNode,
+  router: NextRouter
+}
+
+const Main: React.FC<MainProps> = ({ children, router }) => {
   return (
     <>
       <Head>

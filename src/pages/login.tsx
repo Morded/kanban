@@ -3,9 +3,6 @@ import React from "react"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 
-export function Component() {
-}
-
 const Login: NextPage = () => {
   const session = useSession()
   // if (session) {
@@ -28,7 +25,7 @@ const Login: NextPage = () => {
 
         <div className="p-4"></div>
         <Button
-          onClick={() => signIn()}
+          handleClick={() => signIn()}
           text="Sign in"
           otherText="Don't have an account yet?"
           otherLink="/register"

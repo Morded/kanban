@@ -1,4 +1,5 @@
-import { DetailedHTMLProps } from "react"
+import Link from 'next/link';
+import React from 'react'
 
 type InputProps = {
   label: string,
@@ -16,19 +17,23 @@ const Input = ({ label, type }: InputProps) => {
 };
 
 type ButtonProps = {
-  onClick: Function,
+  handleClick: React.MouseEventHandler,
   text: string,
   otherText?: string,
   otherLink?: string,
   otherLinkText?: string
 };
 
-const Button = ({ onClick, text, otherText, otherLink, otherLinkText }: ButtonProps) => {
+const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink, otherLinkText }) => {
   const other = () => {
     if (otherText && otherLink && otherLinkText) {
       return (
         <div className="text-center text-gray-200 pt-2">
-          <p>{otherText}<a className="text-yellow-200" href={`${otherLink}`}> {otherLinkText}</a></p>
+          <p>{otherText}
+            <Link className="text-yellow-200" href={`${otherLink}`}>
+              <a> {otherLinkText}</a>
+            </Link>
+          </p>
         </div>
       )
     }
@@ -36,7 +41,7 @@ const Button = ({ onClick, text, otherText, otherLink, otherLinkText }: ButtonPr
 
   return (
     <>
-      <button onClick={onClick} className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl">
+      <button onClick={handleClick} className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl">
         {text}
       </button>
       {other()}
