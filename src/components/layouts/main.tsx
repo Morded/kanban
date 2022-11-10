@@ -18,11 +18,10 @@ const Main: React.FC<MainProps> = ({ children, router }) => {
 
       <main className="container w-full mx-auto flex flex-col items-center justify-center min-h-screen p-4">
         {children}
-
-        <div className="p-6 text-sm text-gray-300 absolute text-center bottom-0 w-full">
-          This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>
-        </div>
       </main>
+      <footer className="p-6 text-sm text-gray-300 fixed text-center bottom-0 w-full">
+        This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>
+      </footer>
     </>
   )
 }
