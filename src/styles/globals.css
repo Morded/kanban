@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-800;
+  @apply bg-slate-800;
 }
 
 .btn {
-  @apply z-50 p-3 bg-gray-700 rounded-full text-2xl hover:bg-gray-600 hover:rounded-xl;
+  @apply z-50 p-3 bg-slate-700 md:rounded-full text-2xl hover:bg-slate-600 hover:md:rounded-xl;
 }

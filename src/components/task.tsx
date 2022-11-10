@@ -1,18 +1,35 @@
-import React from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { FiEdit3 } from "react-icons/fi";
+import { RiCheckLine } from "react-icons/ri";
 
 type TaskProps = {
   title: string,
-  desc?: string
+  description?: string
 };
 
-export const Task = ({ title, desc }: TaskProps) => {
+export const Task = ({ title, description }: TaskProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, [isEditing]);
+
   return (
-    <div className="relative flex flex-col rounded-lg bg-gray-700 text-white w-8/12 mx-auto my-auto">
-      <button title="Edit" className="absolute right-0 p-4 text-xl hover:text-yellow-200 transition-color delay-100 ease-in-out"><FiEdit3 /></button>
-      <h2 className="text-xl p-2 font-bold" contentEditable="true">{title}</h2>
-      <p className="m-1 p-1 bg-gray-700 break-all h-[200px] align-top truncate">{desc}</p>
-    </div >
+    <div className="relative flex flex-col rounded-lg bg-slate-700 text-white w-8/12 mx-auto my-auto">
+      <div className="p-2">
+        <h2 ref={titleRef} className="text-xl p-2 font-bold first-letter:uppercase" contentEditable={isEditing}>{title}</h2>
+        <p className="m-1 p-1 bg-gray-700 break-word h-content align-top " contentEditable={isEditing}>{description}</p>
+      </div>
+
+      <div className="w-full border-t-2 text-slate-500 border-slate-800">
+        <button
+          title={isEditing ? "Done editing" : "Edit"}
+          className={`p-3 text-xl transition-all delay-100 ease-in-out hover:text-yellow-200 ${isEditing && "text-yellow-200"}`}
+          onClick={() => setIsEditing(prev => !prev)}
+        >{isEditing ? <RiCheckLine /> : <FiEdit3 />}</button>
+
+      </div>
+    </div>
   )
 };
-
