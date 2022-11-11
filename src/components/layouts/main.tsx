@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { NextRouter } from "next/router";
 import React from 'react';
+import { FiGrid, FiLogOut } from "react-icons/fi";
+import { Navigation, NavButton } from '../nav'
 
 type MainProps = {
   children: React.ReactNode,
@@ -16,9 +18,25 @@ const Main: React.FC<MainProps> = ({ children, router }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container w-full mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        {children}
-      </main>
+      <div className="flex flex-row">
+        <Navigation>
+          <NavButton
+            label="Dashboard"
+            icon={FiGrid}
+            href="dashboard"
+          />
+          <NavButton
+            label="Sign out"
+            icon={FiLogOut}
+            href="logout"
+          />
+        </Navigation>
+
+        <main className="container w-full flex flex-col items-center justify-start min-h-screen p-2 md:p-0">
+          {children}
+        </main>
+      </div>
+
       <footer className="p-6 text-sm text-gray-300 fixed text-center bottom-0 w-full">
         This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>
       </footer>

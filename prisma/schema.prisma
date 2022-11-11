@@ -17,6 +17,12 @@ datasource db {
     referentialIntegrity = "prisma"
 }
 
+model Task { 
+    id          String @id @default(cuid())
+    title       String?
+    description String?
+}
+
 model Example {
     id String @id @default(cuid())
 }

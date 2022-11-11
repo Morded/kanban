@@ -3,28 +3,33 @@ import { FiLogOut, FiGrid } from "react-icons/fi";
 import { Navigation, NavButton } from "../components/nav"
 import Link from "next/link";
 import { Task } from "../components/task";
+import { Category } from "../components/category";
+
+import { trpc } from "../utils/trpc";
 
 const Dashboard: NextPage = () => {
+  // const t = trpc.example.getAll.useQuery({ text: 'getAll' });
+  // console.log(t)
+
   return (
-    <>
-      <Navigation>
-        <NavButton
-          label="Dashboard"
-          icon={FiGrid}
-          href="dashboard"
-        />
-        <NavButton
-          label="Sign out"
-          icon={FiLogOut}
-          href="logout"
-        />
-      </Navigation>
+    <div className="flex gap-1 w-full flex-row justify-start min-h-screen overflow">
 
-      <div className="grid w-96">
+      <Category name="TODO" >
+        <Task title={'test'} description={'test desc'} tags={['High', 'Design']} />
         <Task title={'test'} description={'test desc'} />
-      </div>
+        <Task title={'test'} description={'test desc'} />
+        <Task title={'test'} description={'test desc'} />
+      </Category>
 
-    </>
+      <Category name="In progress" >
+        <Task title={'test'} description={'test desc'} />
+      </Category>
+
+      <Category name="Done" >
+        <Task title={'test'} description={'test desc'} />
+      </Category>
+
+    </div>
   );
 };
 
