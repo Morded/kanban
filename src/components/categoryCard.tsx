@@ -47,7 +47,7 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
   return (
     <div className={`flex flex-row gap-3 p-4 justify-between 
       items-center w-full border rounded border-slate-700 glassmorph-dark
-        hover:border-lime-700 transition-all duration-100 ease-in-out
+        hover:border-violet-700 transition-all duration-100 ease-in-out
         ${isEditing ? 'border-lime-700' : ''}
         ${!isActiveNow ? 'text-gray-500' : ''}
       `}>

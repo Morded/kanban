@@ -47,12 +47,11 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
   return (
     <div className={`relative flex flex-col rounded-lg bg-slate-700 
         text-white w-full border border-slate-700 transition-all 
-        duration-100 ease-in-out hover:border-lime-700 glassmorph-dark h-content
+        duration-100 ease-in-out hover:border-violet-700 glassmorph-dark h-content
         ${isEditing ? 'border-lime-700' : ''}
       `}
     >
       <div className="p-2">
-
         <textarea
           ref={titleRef}
           name="title"
@@ -67,7 +66,10 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
           readOnly={!isEditing}
           value={actualDesc}
           onChange={e => setActualDesc(e.target.value)}
-          className="m-1 p-1 bg-inherit text-gray-400 break-word h-content align-top focus:outline-none w-full h-auto resize-none text-ellipsis"
+          className={`
+            m-1 p-1 bg-inherit text-gray-400 break-word h-content align-top focus:outline-none w-full h-auto resize-none text-ellipsis
+            ${actualDesc!.length > 0 ? 'h-auto' : 'h-0'} focus:h-auto
+          `}
           rows={2}
         />
       </div>

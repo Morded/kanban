@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { NextRouter } from "next/router";
 import React from 'react';
-import { FiGrid, FiLayout, FiLogOut } from "react-icons/fi";
+import { FiColumns, FiGrid, FiLayout, FiLogOut } from "react-icons/fi";
 import { Navigation, NavButton } from '../nav'
 
 type MainProps = {
@@ -24,6 +24,11 @@ const Main: React.FC<MainProps> = ({ children }) => {
             label="Dashboard"
             icon={FiLayout}
             href="dashboard"
+          />
+          <NavButton
+            label="Tasks"
+            icon={FiColumns}
+            href="tasks"
           />
           <NavButton
             label="Categories"
