@@ -43,7 +43,7 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     if (addCategory === '' || typeof getMaxOrder.data === 'undefined') return
 
-    let order = getMaxOrder!.data!._max.order
+    const order = getMaxOrder!.data!._max.order
     console.log(order)
 
     // if (order === null) order = 0
@@ -77,6 +77,7 @@ const Dashboard: NextPage = () => {
         .filter(category => category.active === true)
         .map(category =>
           <Category
+            key={category.id}
             name={category.name}
             onAdd={() => handleAdd(category.id)}
           >

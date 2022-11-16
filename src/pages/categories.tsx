@@ -95,21 +95,6 @@ const Categories: NextPage = () => {
         <h2 className="text-center text-xl font-bold">Warning</h2>
         <p>If you delete this column, all the tasks under this category will be deleted as well.</p>
       </Modal>
-      <Modal
-        open={addModalOpen}
-        onOkay={() => { }}
-        onClose={() => setAddModalOpen(false)}
-        okayButtonText="Add"
-      >
-        <h2 className="text-center text-xl font-bold">Add new category</h2>
-        <input
-          type='text'
-          value={actualAddInput}
-          onChange={e => setActualAddInput(e.target.value)}
-          className="bg-transparent focus:outline-none p-2 rounded text-center border border-gray-700 focus:border-violet-700"
-        />
-
-      </Modal>
     </div>
   );
 };
