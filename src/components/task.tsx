@@ -19,6 +19,7 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
   const [actualDesc, setActualDesc] = useState(description)
   const [titleHeight, setTitleHeight] = useState<number>()
   const titleRef = useRef<HTMLTextAreaElement>(null);
+  const original = { title: title, desc: description };
 
   useEffect(() => {
     if (isNew) {
@@ -27,7 +28,7 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
   }, [])
 
   useEffect(() => {
-    if (!isEditing) {
+    if (!isEditing && (original.title !== actualTitle || original.desc !== actualDesc)) {
       onEdit(id, actualTitle, actualDesc || '')
     }
 

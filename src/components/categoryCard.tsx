@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import useHasChanged from "../components/hooks/useHasChanged";
 import Switch from "react-switch";
 import { RiCheckLine } from "react-icons/ri";
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
@@ -18,8 +17,8 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
   const [isEditing, setIsEditing] = useState(false);
   const [actualValue, setActualValue] = useState(name);
   const [isActiveNow, setIsActiveNow] = useState(isActive);
-  const hasValueChanged = useHasChanged(actualValue);
   const categoryRef = useRef<HTMLInputElement>(null)
+  const originalValue = name;
 
   useEffect(() => {
     if (isNew) {
@@ -28,7 +27,6 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
   }, [])
 
   useEffect(() => {
-    // TODO: hasValueChanged is not working for some reason
     if (!isEditing) {
       doEdit();
     }
@@ -36,16 +34,14 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
     categoryRef.current?.focus();
   }, [isEditing]);
 
-  const closeModal = () => {
-    //
-  }
-
   useEffect(() => {
     doEdit();
   }, [isActiveNow])
 
   const doEdit = () => {
-    onEdit(id, actualValue, isActiveNow);
+    if (originalValue !== actualValue) {
+      onEdit(id, actualValue, isActiveNow);
+    }
   }
 
   return (

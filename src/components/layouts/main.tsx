@@ -44,9 +44,6 @@ const Main: React.FC<MainProps> = ({ children }) => {
 
       <div id="portal"></div>
 
-      <footer className="p-6 text-sm text-gray-300 fixed text-center bottom-0 w-full">
-        This project is open source on github &gt; <a className="text-yellow-200" href="https://github.com/Morded/kanban">check it out</a>
-      </footer>
     </>
   )
 }
