@@ -17,8 +17,6 @@ const Modal: React.FC<ModalProps> = ({
   onOkay,
   okayButtonText,
 }: ModalProps) => {
-  if (!open) return null
-
   const [portal, setPortal] = useState<HTMLElement>()
 
   useEffect(() => {
@@ -26,6 +24,8 @@ const Modal: React.FC<ModalProps> = ({
       setPortal(document.getElementById('portal') || undefined);
     }
   }, [])
+
+  if (!open) return null
 
   return portal
     ? ReactDom.createPortal(
