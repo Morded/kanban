@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
 import { RiCheckLine } from "react-icons/ri";
-import useHasChanged from "./hooks/useHasChanged";
 
 type TaskProps = {
   id: string;
@@ -20,8 +19,6 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
   const [actualDesc, setActualDesc] = useState(description)
   const [titleHeight, setTitleHeight] = useState<number>()
   const titleRef = useRef<HTMLTextAreaElement>(null);
-  const hasTitleChanged = useHasChanged(actualTitle);
-  const hasDescriptionChanged = useHasChanged(actualDesc);
 
   useEffect(() => {
     if (isNew) {
