@@ -57,7 +57,7 @@ const NavButton = ({ label, icon, href, onClick, onlyMobile, isHamburger }: NavB
 }
 
 type NavigationProps = {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ children }) => {

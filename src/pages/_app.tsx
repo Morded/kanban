@@ -14,6 +14,7 @@ const MyApp: AppType = ({
   pageProps: { session, ...pageProps },
   router
 }) => {
+
   return (
     <SessionProvider session={session}>
       <Layout router={router}>
@@ -70,5 +71,5 @@ export default withTRPC<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    */
-  ssr: true,
+  ssr: false,
 })(MyApp);

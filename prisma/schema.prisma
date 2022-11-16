@@ -17,10 +17,24 @@ datasource db {
     referentialIntegrity = "prisma"
 }
 
+model Category {
+    id      String  @id @default(cuid())
+    order   Int     @unique 
+    name    String  @unique
+    default Boolean @default(false)
+    active  Boolean @default(true)
+    new     Boolean @default(true)
+    tasks   Task[]
+}
+
 model Task { 
-    id          String @id @default(cuid())
+    id          String    @id @default(cuid())
+    order       Int       
+    categoryId  String
     title       String?
     description String?
+    new         Boolean   @default(true)
+    category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Example {
