@@ -7,6 +7,16 @@ export const taskRouter = createRouter()
       return await ctx.prisma.task.findMany();
     },
   })
+  .query("getCountByCategory", {
+    async resolve({ ctx }) {
+      return await ctx.prisma.task.groupBy({
+        by: ['categoryId'],
+        _count: {
+          _all: true
+        },
+      });
+    },
+  })
   .query("getMaxOrderByCategory", {
     input: z
       .object({
