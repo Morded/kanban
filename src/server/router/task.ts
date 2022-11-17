@@ -16,7 +16,10 @@ export const taskRouter = createRouter()
       return await ctx.prisma.task.aggregate({
         _max: { order: true },
         where: { categoryId: input.categoryId }
-      });
+      })
+        .catch((error) => {
+          return error
+        });
     },
   })
   .mutation('createTask', {

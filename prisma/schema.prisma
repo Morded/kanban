@@ -19,7 +19,7 @@ datasource db {
 
 model Category {
     id      String  @id @default(cuid())
-    order   Int     @unique 
+    order   Int      
     name    String  @unique
     default Boolean @default(false)
     active  Boolean @default(true)

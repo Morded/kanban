@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
 import { RiCheckLine } from "react-icons/ri";
+import TextareaAutosize from 'react-textarea-autosize';
 
 type TaskProps = {
   id: string;
@@ -37,7 +38,7 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
 
   useEffect(() => {
     // TODO: Need to implement automatic height for both title and desc
-    // setTitleHeight(titleRef.current?.scrollHeight);
+    // setTitleHeight(() => titleRef.current?.scrollHeight);
   }, [actualTitle])
 
   const handleTitleChange = (value: string) => {
@@ -52,25 +53,18 @@ export const Task = ({ id, order, title, description, tags, onEdit, onDelete, is
       `}
     >
       <div className="p-2">
-        <textarea
-          ref={titleRef}
-          name="title"
+        <TextareaAutosize value={actualTitle} onChange={e => setActualTitle(e.target.value)}
           readOnly={!isEditing}
-          value={actualTitle}
-          onChange={e => handleTitleChange(e.target.value)}
-          className={`text-xl bg-inherit p-2 font-bold first-letter:uppercase focus:outline-none w-full resize-none text-ellipsis`}
-          rows={1}
+          className={`text-xl bg-inherit p-2 font-bold first-letter:uppercase focus:outline-none w-full resize-none text-ellipsis `}
         />
-        <textarea
-          name="desc"
+        <TextareaAutosize value={actualDesc} onChange={e => setActualDesc(e.target.value)}
+          placeholder="Press TAB or click here for desc..."
           readOnly={!isEditing}
-          value={actualDesc}
-          onChange={e => setActualDesc(e.target.value)}
           className={`
             m-1 p-1 bg-inherit text-gray-400 break-word h-content align-top focus:outline-none w-full h-auto resize-none text-ellipsis
-            ${actualDesc!.length > 0 ? 'h-auto' : 'h-0'} focus:h-auto
+            ${actualDesc!.length > 0 ? 'h-auto' : 'h-8 opacity-50'} 
+            ${isEditing ? 'focus:h-auto' : ''}
           `}
-          rows={2}
         />
       </div>
 

@@ -6,14 +6,16 @@ import { FiEdit3, FiTrash2 } from "react-icons/fi";
 type CategoryCardProps = {
   id: string;
   name: string;
+  order: number;
   isDefault: boolean;
   isActive: boolean;
-  onEdit: (id: string, name: string, active: boolean) => void;
+  onEdit: (id: string, name: string, active: boolean, isNew: boolean) => void;
   onDelete: () => void;
   isNew: boolean;
+  isInConflict: boolean;
 }
 
-const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }: CategoryCardProps) => {
+const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, isNew, isInConflict }: CategoryCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [actualValue, setActualValue] = useState(name);
   const [isActiveNow, setIsActiveNow] = useState(isActive);
@@ -21,7 +23,9 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
   const originalValue = name;
 
   useEffect(() => {
-    if (isNew) {
+    console.log(isNew, ' ', order)
+    if (isNew || (order === -2)) {
+      console.log(order)
       setIsEditing(true);
     }
   }, [])
@@ -40,7 +44,7 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
 
   const doEdit = () => {
     if (originalValue !== actualValue) {
-      onEdit(id, actualValue, isActiveNow);
+      onEdit(id, actualValue, isActiveNow, isNew);
     }
   }
 
@@ -50,6 +54,7 @@ const CategoryCard = ({ id, name, isDefault, isActive, onEdit, onDelete, isNew }
         hover:border-violet-700 transition-all duration-100 ease-in-out
         ${isEditing ? 'border-lime-700' : ''}
         ${!isActiveNow ? 'text-gray-500' : ''}
+        ${(isInConflict || order === -2) ? 'border-red-900' : ''}
       `}>
       <form onSubmit={e => { e.preventDefault(); setIsEditing(false) }} className='w-full'>
         <input

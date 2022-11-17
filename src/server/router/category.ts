@@ -1,25 +1,41 @@
 import { createRouter } from "./context";
 import { z } from "zod";
-import { prisma } from "../../server/db/client";
 
 export const categoryRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
-      return await ctx.prisma.category.findMany();
+      return await ctx.prisma.category.findMany({
+        orderBy: {
+          order: 'asc'
+        }
+      });
     },
+  })
+  .query("getMaxOrder", {
+    async resolve({ ctx }) {
+      return await ctx.prisma.category.aggregate({
+        _max: {
+          order: true,
+        }
+      })
+    }
   })
   .mutation('createCategory', {
     input: z
       .object({
         name: z.string(),
-        order: z.number(),
-        default: z.boolean().default(false),
-        active: z.boolean().default(true),
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.category.create({
-        data: input,
-      });
+        data: {
+          name: input.name,
+          order: 1000000,
+          new: false,
+        },
+      })
+        .catch((error) => {
+          return error.code
+        });
     }
   })
   .mutation('editCategory', {
@@ -50,4 +66,40 @@ export const categoryRouter = createRouter()
         where: id,
       })
     }
-  });
+  })
+  .mutation('reorderCategoryById', {
+    input: z
+      .object({
+        id: z.string().cuid(),
+        order: z.number(),
+      }),
+    async resolve({ input, ctx }) {
+      const { id, order } = input;
+      return await ctx.prisma.category.update({
+        where: { id },
+        data: { order },
+      })
+    }
+  })
+  .mutation('reorderCategoryLower', {
+    input: z
+      .object({
+        oldOrder: z.number(),
+        newOrder: z.number(),
+      }),
+    async resolve({ input, ctx }) {
+      return await ctx.prisma.category.updateMany({
+        where: {
+          order: {
+            lt: input.oldOrder,
+            gte: input.newOrder
+          }
+        },
+        data: {
+          order: {
+            increment: 1
+          }
+        }
+      })
+    }
+  })
