@@ -4,7 +4,11 @@ import { z } from "zod";
 export const taskRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
-      return await ctx.prisma.task.findMany();
+      return await ctx.prisma.task.findMany({
+        orderBy: {
+          order: 'asc'
+        }
+      });
     },
   })
   .query("getCountByCategory", {
@@ -35,15 +39,19 @@ export const taskRouter = createRouter()
   .mutation('createTask', {
     input: z
       .object({
-        order: z.number(),
         title: z.string(),
         description: z.string(),
         categoryId: z.string().cuid(),
-        new: z.boolean(),
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.task.create({
-        data: input,
+        data: {
+          title: input.title,
+          description: input.description,
+          order: 1000000,
+          new: false,
+          categoryId: input.categoryId,
+        }
       });
     }
   })
@@ -75,4 +83,35 @@ export const taskRouter = createRouter()
         where: id,
       })
     }
-  });
+  })
+  .mutation('reorderTaskById', {
+    input: z
+      .object({
+        id: z.string().cuid(),
+        order: z.number(),
+      }),
+    async resolve({ input, ctx }) {
+      const { id, order } = input;
+      return await ctx.prisma.task.update({
+        where: { id },
+        data: { order },
+      })
+    }
+  })
+  .mutation('editTaskCategory', {
+    input: z
+      .object({
+        id: z.string().cuid(),
+        categoryId: z.string().cuid(),
+      }),
+    async resolve({ ctx, input }) {
+      const { id, categoryId } = input;
+      return await ctx.prisma.task.update({
+        where: { id },
+        data: {
+          categoryId: categoryId,
+          order: 1000000,
+        },
+      });
+    }
+  })

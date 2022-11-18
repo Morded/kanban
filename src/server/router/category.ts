@@ -11,6 +11,18 @@ export const categoryRouter = createRouter()
       });
     },
   })
+  .query("getAllActive", {
+    async resolve({ ctx }) {
+      return await ctx.prisma.category.findMany({
+        where: {
+          active: true
+        },
+        orderBy: {
+          order: 'asc'
+        }
+      });
+    },
+  })
   .query("getMaxOrder", {
     async resolve({ ctx }) {
       return await ctx.prisma.category.aggregate({
@@ -78,28 +90,6 @@ export const categoryRouter = createRouter()
       return await ctx.prisma.category.update({
         where: { id },
         data: { order },
-      })
-    }
-  })
-  .mutation('reorderCategoryLower', {
-    input: z
-      .object({
-        oldOrder: z.number(),
-        newOrder: z.number(),
-      }),
-    async resolve({ input, ctx }) {
-      return await ctx.prisma.category.updateMany({
-        where: {
-          order: {
-            lt: input.oldOrder,
-            gte: input.newOrder
-          }
-        },
-        data: {
-          order: {
-            increment: 1
-          }
-        }
       })
     }
   })

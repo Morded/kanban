@@ -75,7 +75,7 @@ const Navigation: React.FC<NavigationProps> = ({ children }) => {
 
   return (
     <>
-      <nav className={`flex z-50 flex-col md:items-center md:justify-center min-h-screen text-base ${width < mediumWidth && "absolute"} ${(isOpen && width < mediumWidth) && "bg-slate-700 md:bg-inherit w-3/4"}`}>
+      <nav className={`flex z-50 flex-col md:items-center md:justify-center sm:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-slate-700 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
         <ul className="md:w-16 w-full mt-5 md:mt-0 md:top-auto gap-5 transition-all duration-300 text-white md:pl-2 flex flex-col">
           {width < mediumWidth &&
             <NavButton

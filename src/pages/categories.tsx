@@ -54,7 +54,6 @@ const Categories: NextPage = () => {
   useEffect(() => {
     if (isReordering === true) {
       items.map((item, i) => {
-        console.log('item: ', item.id, 'index:', i)
         reorderCategoryById.mutate({
           id: item.id,
           order: i,
