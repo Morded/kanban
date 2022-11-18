@@ -118,7 +118,7 @@ const Categories: NextPage = () => {
   const handleEdit = async (id: string, name: string, active: boolean, isNew: boolean) => {
     // if (isNew === true) {
     let alreadyExists = false;
-    items.map(category => {
+    items.filter(category => category.id !== id).map(category => {
       if (category.name.toLowerCase() === name.toLowerCase()) {
         alreadyExists = true;
       }

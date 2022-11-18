@@ -19,6 +19,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
   const [isEditing, setIsEditing] = useState(false);
   const [actualValue, setActualValue] = useState(name);
   const [isActiveNow, setIsActiveNow] = useState(isActive);
+  const [activeChanged, setActiveChanged] = useState(false);
   const categoryRef = useRef<HTMLInputElement>(null)
   const originalValue = name;
 
@@ -39,12 +40,15 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
   }, [isEditing]);
 
   useEffect(() => {
-    doEdit();
-  }, [isActiveNow])
+    if (activeChanged === true) {
+      doEdit();
+    }
+  }, [activeChanged])
 
   const doEdit = () => {
-    if (originalValue !== actualValue) {
+    if (originalValue !== actualValue || activeChanged === true) {
       onEdit(id, actualValue, isActiveNow, isNew);
+      setActiveChanged(false);
     }
   }
 
@@ -73,7 +77,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
         isDefault ?
           <Switch
             checked={isActiveNow}
-            onChange={(checked) => setIsActiveNow(checked)}
+            onChange={(checked) => { setIsActiveNow(() => checked); setActiveChanged(true) }}
             onColor="#86d3ff"
             onHandleColor="#2693e6"
             handleDiameter={20}

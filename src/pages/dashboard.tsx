@@ -20,20 +20,10 @@ const Dashboard: NextPage = () => {
     fetchRandomQuote();
   }, [])
 
-  const getCountByCategory = (id: string) => {
-    if (taskCount.data) {
-      taskCount.data
-        .filter(task => task.categoryId === id)
-        .map(task =>
-          <span>{task._count._all}</span>
-        )
-    }
-  }
-
   return (
     <div className="flex flex-col p-4 gap-20 h-full pt-24 items-center justify-start md:justify-center md:pt-0 items-start w-full text-white">
       {quote &&
-        <div className="text-2xl text-slate-600 flex flex-col w-3/4 gap-4 items-center justify-center text-center">
+        <div className="text-lg sm:text-2xl text-slate-600 flex flex-col w-3/4 gap-4 items-center justify-center text-center">
           <p className="italic">"{quote.content}"</p>
           <p className="text-sm">{quote.author}</p>
         </div>
@@ -44,6 +34,7 @@ const Dashboard: NextPage = () => {
           <div className="flex flex-col justify-center gap-10 items-center w-full">
             <div className="flex flex-col justify-center flex-wrap items-center text-center text-xl md:flex-row gap-4 w-full">
               {categories?.data && categories.data
+                .filter(category => category.active === true)
                 .map(category =>
                   <div
                     key={category.id}
@@ -52,11 +43,19 @@ const Dashboard: NextPage = () => {
               `}
                   >
                     <p className="text-violet-500">{category.name}</p>
-                    {taskCount.data && taskCount.data
-                      .filter(task => task.categoryId === category.id)
-                      .map((task, i) =>
-                        <span className="text-2xl font-bold" key={i}>{task._count._all}</span>
-                      )}
+
+                    <span className="text-2xl font-bold">
+                      {
+                        taskCount.data && (taskCount.data
+                          .filter(task => task.categoryId === category.id)
+                          .length > 0
+                          ? taskCount.data
+                            .filter(task => task.categoryId === category.id)
+                            .map(task => task._count._all
+                            )
+                          : 0
+                        )}
+                    </span>
                   </div>
                 )}
             </div>
@@ -77,3 +76,17 @@ const Dashboard: NextPage = () => {
 
 export default Dashboard;
 
+const CategoryTaskCount = (categoryId: string) => {
+  const taskCount = trpc.useQuery(["task.getCountByCategory"]);
+
+  const count = taskCount.data && taskCount.data
+    .filter(task => task.categoryId === categoryId)
+    .map((task, i) =>
+      <>
+        <span key={i} className="text-2xl font-bold">{task._count._all}</span>
+      </>
+    )
+
+  if (count) return count
+  return <><span className="text-2xl font-bold">0</span></>
+}
