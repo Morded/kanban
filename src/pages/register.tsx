@@ -40,7 +40,7 @@ const Register: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col pt-5 md:pt-0 justify-center items-center min-h-screen">
+    <div className="flex flex-col pt-20 md:pt-0 justify-start md:justify-center items-center min-h-screen">
       <Form header="Sign up">
         {errorMessage !== '' &&
           <motion.div

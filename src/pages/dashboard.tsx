@@ -8,7 +8,7 @@ const Dashboard: NextPage = () => {
   const [quote, setQuote] = useState<{ author: string, content: string }>()
   const categories = trpc.useQuery(["category.getAll"]);
   const taskCount = trpc.useQuery(["task.getCountByCategory"]);
-  const [noCategories, setNoCategories] = useState(false);
+  const [noCategories, setNoCategories] = useState(true);
 
   const fetchRandomQuote = async () => {
     await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
@@ -21,8 +21,8 @@ const Dashboard: NextPage = () => {
     fetchRandomQuote();
 
     if (!categories.isLoading && categories.data) {
-      if (categories!.data!.filter(category => category.active === true).length === 0) {
-        setNoCategories(true);
+      if (categories!.data!.filter(category => category.active === true).length !== 0) {
+        setNoCategories(false);
       }
     }
   }, [])
