@@ -32,7 +32,7 @@ const NavButton = ({ label, icon, href, onClick, onlyMobile, isHamburger }: NavB
       {
         href ?
           <Link href={`/${href}`}>
-            <div onClick={onClick} className={`flex gap-3 justify-start items-center w-full md:w-auto btn peer ${onlyMobile && 'md:hidden'}`} >
+            <div onClick={onClick} className={`cursor-pointer flex gap-3 justify-start items-center w-full md:w-auto btn peer ${onlyMobile && 'md:hidden'}`} >
               <div className="pl-2 md:pl-0">
                 {React.createElement(icon)}
               </div>
@@ -93,7 +93,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav ref={menuRef} className={`flex z-50 flex-col md:items-center md:justify-center sm:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-black bg-opacity-80 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
+      <nav ref={menuRef} className={`flex z-50 flex-col md:items-center md:justify-center md:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-black bg-opacity-80 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
         <ul className="md:w-16 w-full mt-5 md:mt-0 md:top-auto gap-5 transition-all duration-300 text-white md:pl-2 flex flex-col">
           {width < mediumWidth &&
             <NavButton

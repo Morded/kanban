@@ -15,7 +15,7 @@ const Login: NextPage = () => {
 
   if (authenticated === true) {
     return <>
-      Signed in as  <br />
+      Signed in as {authenticated}<br />
       <button onClick={() => signOut()}>Sign out</button>
     </>
   }
@@ -33,7 +33,7 @@ const Login: NextPage = () => {
 
         <div className="p-4"></div>
         <Button
-          handleClick={() => signIn()}
+          handleClick={() => signIn('credentials', { redirect: true })}
           text="Sign in"
           otherText="Don't have an account yet?"
           otherLink="/register"

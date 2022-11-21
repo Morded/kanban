@@ -72,8 +72,6 @@ const Tasks: NextPage = () => {
           })
       })
     }
-
-    setAddCategory('');
   }, [items])
 
   const handleCategoryChange = async (id: string, newCategoryId: string) => {
@@ -90,6 +88,8 @@ const Tasks: NextPage = () => {
         description: description,
         categoryId: addCategory,
       });
+
+      setAddCategory('');
     } else {
       await editTask.mutateAsync({
         id: id,
@@ -103,7 +103,13 @@ const Tasks: NextPage = () => {
   }
 
   const handleDelete = async (id: string) => {
-    await deleteTask.mutateAsync({ id: id });
+    if (addCategory !== '') {
+      const updatedItems = items.filter(item => item.id !== '');
+      setItems(updatedItems);
+      setAddCategory('');
+    } else {
+      await deleteTask.mutateAsync({ id: id });
+    }
   }
 
   return (

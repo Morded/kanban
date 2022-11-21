@@ -48,7 +48,7 @@ const Categories: NextPage = () => {
       setIsReordering(true);
     }
 
-    setIsNewItem(false);
+    // setIsNewItem(false);
   }, [items])
 
   useEffect(() => {
@@ -115,7 +115,6 @@ const Categories: NextPage = () => {
   }, [uniqueConflictName])
 
   const handleEdit = async (id: string, name: string, active: boolean, isNew: boolean) => {
-    // if (isNew === true) {
     let alreadyExists = false;
     items.filter(category => category.id !== id).map(category => {
       if (category.name.toLowerCase() === name.toLowerCase()) {
@@ -128,6 +127,7 @@ const Categories: NextPage = () => {
     } else {
       if (isNew === true) {
         await createCategory.mutateAsync({ name: name })
+        setIsNewItem(false);
       } else {
         await editCategory
           .mutateAsync({
@@ -141,8 +141,14 @@ const Categories: NextPage = () => {
   }
 
   const handleDelete = (id: string) => {
-    setDeleteId(id);
-    setDeleteModalOpen(true);
+    if (isNewItem === true) {
+      const updatedItems = items.filter(item => item.id !== '');
+      setItems(updatedItems);
+      setIsNewItem(false);
+    } else {
+      setDeleteId(id);
+      setDeleteModalOpen(true);
+    }
   }
 
   const handleDeleteOkay = async () => {

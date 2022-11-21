@@ -56,10 +56,10 @@ export const Task = ({ id, title, description, onEdit, onDelete, isNew, category
         }}
         transition={{ type: "spring" }}
         key={id}
-        className={`relative flex flex-col rounded-lg bg-slate-700 
-        text-white w-full border border-slate-700 
+        className={`relative flex flex-col rounded-lg
+        text-white w-full border border-slate-800 
         hover:border-violet-700 glassmorph-dark h-content
-        ${isEditing ? 'border-lime-700' : ''}
+        ${isEditing === true ? 'border-lime-600' : ''}
       `}
       >
         <div className="p-2">
@@ -78,11 +78,11 @@ export const Task = ({ id, title, description, onEdit, onDelete, isNew, category
           />
         </div>
 
-        <div className="flex flex-row items-center px-3 py-2 justify-between w-full border-t-2 text-slate-500 border-slate-600">
+        <div className="flex flex-row items-center px-3 py-2 justify-between w-full border-t-2 text-slate-500 border-slate-800">
           <div className="flex gap-4">
             <button
               title={isEditing ? "Done editing" : "Edit"}
-              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-lime-700"}`}
+              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-lime-600"}`}
               onClick={() => setIsEditing(prev => !prev)}
             >{isEditing ? <RiCheckLine /> : <FiEdit3 />}</button>
             <button

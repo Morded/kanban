@@ -71,7 +71,7 @@ const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonP
                   disabled={category.id === categoryId}
                   className={`
                   p-3 border-b last:border-b-0 border-slate-600 w-[12rem] opacity-0
-                  font-bold w-content ${category.id === categoryId ? 'text-slate-600' : 'hover:text-violet-500'}
+                  font-bold w-content ${category.id === categoryId ? 'text-slate-600' : 'hover:text-violet-700'}
                 `}>
                   {category.name}
                 </motion.button>
