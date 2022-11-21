@@ -56,7 +56,7 @@ const Register: NextPage = () => {
               opacity: 0,
               translateY: '-20px'
             }}
-            className="duration-150 w-[16rem] text-center text-red-600 word-break py-5"
+            className="duration-150 md:w-[16rem] text-center text-red-600 word-break py-5"
           >
             {errorMessage}
           </motion.div>
