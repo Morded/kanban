@@ -20,7 +20,7 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     fetchRandomQuote();
 
-    if (!categories.isLoading) {
+    if (!categories.isLoading && categories.data) {
       if (categories!.data!.filter(category => category.active === true).length === 0) {
         setNoCategories(true);
       }
@@ -37,7 +37,7 @@ const Dashboard: NextPage = () => {
       }
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col mx-auto justify-center items-center text-center text-xl gap-10 w-full md:w-3/4">
-          {(categories!.data!.filter(category => category.active === true).length !== 0) &&
+          {!noCategories &&
             <h2 className="font-extrabold text-xl text-gray-200">Task summary</h2>}
 
           <div className="flex flex-col justify-center gap-10 items-center w-full">
