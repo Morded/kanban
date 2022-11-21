@@ -28,13 +28,19 @@ export const authOptions: NextAuthOptions = {
       id: "domain-login",
       name: "Account",
       async authorize(credentials, req) {
-        const user = {
-          /* add function to get user */
-        }
+        if (credentials === undefined) return
+
+        const user = prisma.user.findFirst({
+          where: {
+            name: credentials.username,
+            password: credentials.password
+          }
+        })
+
         return user
       },
       credentials: {
-        username: { label: "Username", type: "text ", placeholder: "jsmith" },
+        username: { label: "Username", type: "text " },
         password: { label: "Password", type: "password" },
       },
     }),

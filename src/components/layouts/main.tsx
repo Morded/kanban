@@ -19,28 +19,7 @@ const Main: React.FC<MainProps> = ({ children }) => {
       </Head>
 
       <div className="flex flex-row">
-        <Navigation>
-          <NavButton
-            label="Dashboard"
-            icon={FiLayout}
-            href="dashboard"
-          />
-          <NavButton
-            label="Tasks"
-            icon={FiColumns}
-            href="tasks"
-          />
-          <NavButton
-            label="Categories"
-            icon={FiGrid}
-            href="categories"
-          />
-          <NavButton
-            label="Sign out"
-            icon={FiLogOut}
-            href="logout"
-          />
-        </Navigation>
+        <Navigation />
 
         <main className="w-full flex flex-col items-center justify-start min-h-screen p-2 md:p-0">
           {children}

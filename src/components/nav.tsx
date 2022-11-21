@@ -1,7 +1,8 @@
 import { IconType } from "react-icons";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link";
 import { RiMenu4Line, RiCloseLine } from "react-icons/ri";
+import { FiColumns, FiGrid, FiLayout, FiLogOut } from "react-icons/fi";
 
 const mediumWidth = 767;
 
@@ -9,7 +10,7 @@ type NavButtonProps = {
   label?: string;
   icon: IconType;
   href?: string;
-  onClick?: () => void;
+  onClick: () => void;
   onlyMobile?: boolean;
   isHamburger?: boolean;
 };
@@ -31,14 +32,14 @@ const NavButton = ({ label, icon, href, onClick, onlyMobile, isHamburger }: NavB
       {
         href ?
           <Link href={`/${href}`}>
-            <a className={`flex gap-3 justify-start items-center w-full md:w-auto btn peer ${onlyMobile && 'md:hidden'}`} >
+            <div onClick={onClick} className={`flex gap-3 justify-start items-center w-full md:w-auto btn peer ${onlyMobile && 'md:hidden'}`} >
               <div className="pl-2 md:pl-0">
                 {React.createElement(icon)}
               </div>
               {(label && width < mediumWidth) &&
                 <span className="text-lg w-[5em]">{label}</span>
               }
-            </a>
+            </div>
           </Link>
           :
           <button
@@ -56,13 +57,25 @@ const NavButton = ({ label, icon, href, onClick, onlyMobile, isHamburger }: NavB
   )
 }
 
-type NavigationProps = {
-  children: React.ReactNode;
-}
-
-const Navigation: React.FC<NavigationProps> = ({ children }) => {
+const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [width, setWidth] = useState(0);
+  const menuRef = useRef(null);
+  useOutsideCloser(menuRef);
+
+  function useOutsideCloser(ref: any) {
+    useEffect(() => {
+      function handleClickOutside(event: any) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -73,9 +86,14 @@ const Navigation: React.FC<NavigationProps> = ({ children }) => {
     handleResize();
   }, [])
 
+  useEffect(() => {
+    console.log(isOpen)
+
+  }, [isOpen])
+
   return (
     <>
-      <nav className={`flex z-50 flex-col md:items-center md:justify-center sm:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-slate-700 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
+      <nav ref={menuRef} className={`flex z-50 flex-col md:items-center md:justify-center sm:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-black bg-opacity-80 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
         <ul className="md:w-16 w-full mt-5 md:mt-0 md:top-auto gap-5 transition-all duration-300 text-white md:pl-2 flex flex-col">
           {width < mediumWidth &&
             <NavButton
@@ -86,7 +104,34 @@ const Navigation: React.FC<NavigationProps> = ({ children }) => {
             />
           }
 
-          {(isOpen === true || width >= mediumWidth) && children}
+          {(isOpen === true || width >= mediumWidth) &&
+            <>
+              <NavButton
+                label="Dashboard"
+                icon={FiLayout}
+                href="dashboard"
+                onClick={() => setIsOpen(false)}
+              />
+              <NavButton
+                label="Tasks"
+                icon={FiColumns}
+                href="tasks"
+                onClick={() => setIsOpen(false)}
+              />
+              <NavButton
+                label="Categories"
+                icon={FiGrid}
+                href="categories"
+                onClick={() => setIsOpen(false)}
+              />
+              <NavButton
+                label="Sign out"
+                icon={FiLogOut}
+                href="logout"
+                onClick={() => setIsOpen(false)}
+              />
+            </>
+          }
         </ul>
       </nav>
     </>

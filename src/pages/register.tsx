@@ -9,12 +9,14 @@ const Register: NextPage = () => {
   const signUp = () => {
     console.log("TEST")
   }
-  // if (session) {
-  //   return <>
-  //     Signed in as {session.user.email} <br />
-  //     <button onClick={() => signOut()}>Sign out</button>
-  //   </>
-  // }
+
+  if (session.data) {
+    return <>
+      Signed in as {session.data.user!.email} <br />
+      <button onClick={() => signOut()}>Sign out</button>
+    </>
+  }
+
   return (
     <>
       <Form header="Sign up">
@@ -33,7 +35,7 @@ const Register: NextPage = () => {
 
         <div className="p-4"></div>
         <Button
-          handleClick={() => signUp()}
+          handleClick={() => signIn()}
           text="Sign up"
           otherText="Already have an account?"
           otherLink="/login"
