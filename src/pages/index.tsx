@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
       <div className="p-6"></div>
 
-      <Link href="/register"><a className="uppercase text-white hover:shadow-md text-2xl shadow-md py-3 px-6 hover:bg-gray-700 transition-all hover:scale-105 duration-200 drop-shadow-2xl drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
+      <Link href="/register"><a className="text-white hover:shadow-md text-2xl shadow-md py-3 px-6 hover:bg-gray-700 transition-all hover:scale-105 duration-200 drop-shadow-2xl drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
                 duration-300 transition-all ease-in-out hover:from-violet-700 hover:to-fuchsia-700">Get started</a></Link>
     </div>
   );

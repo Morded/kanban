@@ -33,7 +33,7 @@ const Login: NextPage = () => {
 
         <div className="p-4"></div>
         <Button
-          handleClick={() => signIn('credentials', { redirect: true, password:  })}
+          handleClick={() => signIn('credentials', { redirect: true, password: 'test' })}
           text="Sign in"
           otherText="Don't have an account yet?"
           otherLink="/register"

@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink
 
   return (
     <>
-      <button onClick={handleClick} className="uppercase hover:shadow-md text-2xl text-white rounded-xl shadow-md py-3 px-6 transition-all duration-200 drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
+      <button onClick={handleClick} className="hover:shadow-md text-2xl text-white rounded-xl shadow-md py-3 px-6 transition-all duration-200 drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
                 duration-300 transition-all ease-in-out hover:from-violet-700 hover:to-fuchsia-700 hover:scale-105">
         {text}
       </button>
