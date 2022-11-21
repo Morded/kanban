@@ -67,13 +67,13 @@ type FormProps = {
 
 const Form: React.FC<FormProps> = ({ children, header }) => {
   return (
-    <div className='px-6 md:px-2'>
+    <div className='px-2'>
       <h1 className="text-5xl md:text-[4rem] leading-normal font-extrabold text-white">
         {header}
       </h1>
       <div className="p-6"></div>
 
-      <form className="flex flex-col px-10 md:px-0" method="post">
+      <form className="flex flex-col" method="post">
         {children}
       </form>
     </div>
