@@ -20,7 +20,7 @@ const Login: NextPage = () => {
     </>
   }
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
+    <div className="flex flex-col pt-20 px-10 md:px-0 md:-pt-0 justify-start md:justify-center items-center min-h-screen">
       <Form header="Sign in">
         <Input
           label="Username"
@@ -33,7 +33,7 @@ const Login: NextPage = () => {
 
         <div className="p-4"></div>
         <Button
-          handleClick={() => signIn('credentials', { redirect: true })}
+          handleClick={() => signIn('credentials', { redirect: true, password:  })}
           text="Sign in"
           otherText="Don't have an account yet?"
           otherLink="/register"
