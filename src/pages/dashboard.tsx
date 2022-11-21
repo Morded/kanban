@@ -6,7 +6,7 @@ import { trpc } from "../utils/trpc";
 
 const Dashboard: NextPage = () => {
   const [quote, setQuote] = useState<{ author: string, content: string }>()
-  const categories = trpc.useQuery(["category.getAll"]);
+  const categories = trpc.useQuery(["category.getAllActive"]);
   const taskCount = trpc.useQuery(["task.getCountByCategory"]);
   const [noCategories, setNoCategories] = useState(true);
 
@@ -21,7 +21,7 @@ const Dashboard: NextPage = () => {
     fetchRandomQuote();
 
     if (!categories.isLoading && categories.data) {
-      if (categories!.data!.filter(category => category.active === true).length !== 0) {
+      if (categories!.data!.length !== 0) {
         setNoCategories(false);
       }
     }

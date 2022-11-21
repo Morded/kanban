@@ -5,6 +5,7 @@ import { Category } from "../components/category";
 import { trpc } from "../utils/trpc";
 import { useEffect, useState } from "react";
 import { Task as PTask } from "@prisma/client";
+import Link from "next/link";
 
 const Tasks: NextPage = () => {
   const [addCategory, setAddCategory] = useState<string>('')
@@ -114,7 +115,7 @@ const Tasks: NextPage = () => {
 
   return (
     <div className="flex gap-1 w-full flex-row justify-start min-h-screen mb-20">
-      {categories.data && categories.data!
+      {(categories.data && categories.data.length !== 0) ? categories.data!
         .map(category =>
           <Category
             key={category.id}
@@ -136,7 +137,18 @@ const Tasks: NextPage = () => {
             )
             )}
           </Category>
-        )}
+        )
+        : <div className="text-xl flex flex-col gap-4 items-center justify-center text-white w-full min-h-screen">
+          <div>No active categories found.</div>
+          <Link href='categories'>
+            <div className={`py-2 px-5 cursor-pointer font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
+              duration-300 transition-all ease-in-out hover:from-violet-700 hover:to-fuchsia-700
+              `}>
+              Go to categories
+            </div>
+          </Link>
+        </div>
+      }
     </div>
   );
 };
