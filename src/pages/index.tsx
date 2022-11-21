@@ -1,7 +1,4 @@
 import type { NextPage } from "next";
-import { trpc } from "../utils/trpc";
-import { FiLogIn, FiUser } from "react-icons/fi";
-import { Navigation, NavButton } from "../components/nav"
 import Link from "next/link";
 
 const Home: NextPage = () => {

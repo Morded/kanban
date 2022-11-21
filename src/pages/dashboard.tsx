@@ -24,7 +24,7 @@ const Dashboard: NextPage = () => {
     <div className="flex flex-col p-4 gap-20 h-full pt-24 items-center justify-start md:justify-center md:pt-0 items-start w-full text-white">
       {quote &&
         <div className="text-lg sm:text-2xl text-slate-600 flex flex-col w-3/4 gap-4 items-center justify-center text-center">
-          <p className="italic">"{quote.content}"</p>
+          <p className="italic">&quot;{quote.content}&quot;</p>
           <p className="text-sm">{quote.author}</p>
         </div>
       }
@@ -76,17 +76,3 @@ const Dashboard: NextPage = () => {
 
 export default Dashboard;
 
-const CategoryTaskCount = (categoryId: string) => {
-  const taskCount = trpc.useQuery(["task.getCountByCategory"]);
-
-  const count = taskCount.data && taskCount.data
-    .filter(task => task.categoryId === categoryId)
-    .map((task, i) =>
-      <>
-        <span key={i} className="text-2xl font-bold">{task._count._all}</span>
-      </>
-    )
-
-  if (count) return count
-  return <><span className="text-2xl font-bold">0</span></>
-}

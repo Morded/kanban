@@ -11,7 +11,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type }, r
 
   return (
     <>
-      <label className="text-sl text-white pb-2">{label}</label>
+      <label className="text-sl text-gray-400 pb-2">{label}</label>
       <input
         ref={ref}
         className="py-2 px-4 focus:outline-none glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 focus:scale-110"
@@ -23,6 +23,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type }, r
     </>
   );
 });
+
+Input.displayName = 'Input';
 
 type ButtonProps = {
   handleClick: React.MouseEventHandler,
