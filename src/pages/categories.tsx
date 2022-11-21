@@ -185,7 +185,7 @@ const Categories: NextPage = () => {
         </Reorder.Group>
         {uniqueConflictName !== '' &&
           <div className={`mt-4 flex items-center justify-center`}>
-            <p className="py-1 px-4 border rounded-3xl bg-red-200 text-red-900 font-bold text-center">
+            <p className="py-1 px-4 text-red-600 font-bold text-center">
               A category with that name already exists.
               <br />
               Rename it to create a new category.

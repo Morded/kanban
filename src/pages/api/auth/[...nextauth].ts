@@ -37,7 +37,12 @@ export const authOptions: NextAuthOptions = {
           }
         })
 
-        return user
+        if (user) {
+          return user
+        } else {
+          return null
+        }
+
       },
       credentials: {
         username: { label: "Username", type: "text " },
