@@ -138,7 +138,7 @@ const Tasks: NextPage = () => {
             )}
           </Category>
         )
-        : <div className="text-xl flex flex-col gap-4 items-center justify-center text-white w-full min-h-screen">
+        : <div className="text-xl pt-20 sm:pt-0 flex flex-col gap-4 items-center justify-start sm:justify-center text-white w-full min-h-screen">
           <div>No active categories found.</div>
           <Link href='categories'>
             <div className={`py-2 px-5 cursor-pointer font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
