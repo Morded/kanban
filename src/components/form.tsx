@@ -14,7 +14,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type }, r
       <label className="text-sl text-gray-400 pb-2">{label}</label>
       <input
         ref={ref}
-        className="py-2 px-4 focus:outline-none glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 focus:scale-110"
+        className="py-2 px-4 focus:outline-none glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 sm:focus:scale-110"
         type={`${type}`}
         value={value}
         onChange={e => setValue(e.target.value)}
