@@ -67,7 +67,7 @@ type FormProps = {
 
 const Form: React.FC<FormProps> = ({ children, header }) => {
   return (
-    <div className='px-2'>
+    <div className='px-6 md:px-2'>
       <h1 className="text-5xl md:text-[4rem] leading-normal font-extrabold text-white">
         {header}
       </h1>
