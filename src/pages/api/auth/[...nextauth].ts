@@ -27,7 +27,12 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       id: "domain-login",
       name: "Account",
+      credentials: {
+        username: { label: "Username", type: "text " },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials, req) {
+        return null
         // if (credentials === undefined) return
 
         // const user = prisma.user.findFirst({
@@ -43,10 +48,6 @@ export const authOptions: NextAuthOptions = {
         //   return null
         // }
 
-      },
-      credentials: {
-        username: { label: "Username", type: "text " },
-        password: { label: "Password", type: "password" },
       },
     }),
     // ...add more providers here
