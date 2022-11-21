@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col justify-center items-center text-center">
+    <div className="flex flex-col justify-center items-center w-full min-h-screen text-center">
       <h1 className="text-4xl sm:text-5xl align-center md:text-[5rem] leading-normal font-extrabold text-white">
         Morded Kanban
       </h1>
@@ -14,7 +14,8 @@ const Home: NextPage = () => {
 
       <div className="p-6"></div>
 
-      <Link href="/register"><a className="uppercase text-gray-800 hover:shadow-md text-2xl border bg-yellow-200 rounded-xl shadow-md py-3 px-6 hover:bg-gray-700 hover:text-yellow-200 border-yellow-200 transition-all duration-200 drop-shadow-2xl">Get started</a></Link>
+      <Link href="/register"><a className="uppercase text-white hover:shadow-md text-2xl shadow-md py-3 px-6 hover:bg-gray-700 transition-all hover:scale-105 duration-200 drop-shadow-2xl drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
+                duration-300 transition-all ease-in-out hover:from-violet-700 hover:to-fuchsia-700">Get started</a></Link>
     </div>
   );
 };
