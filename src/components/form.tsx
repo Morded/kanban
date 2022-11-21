@@ -73,7 +73,7 @@ const Form: React.FC<FormProps> = ({ children, header }) => {
       </h1>
       <div className="p-6"></div>
 
-      <form className="flex flex-col" method="post">
+      <form className="flex flex-col items-center px-4 md:px-0" method="post">
         {children}
       </form>
     </div>
