@@ -6,6 +6,8 @@ import { trpc } from "../utils/trpc";
 import { useEffect, useState } from "react";
 import { Task as PTask } from "@prisma/client";
 import Link from "next/link";
+import { motion } from "framer-motion"
+import { getSession } from "next-auth/react";
 
 const Tasks: NextPage = () => {
   const [addCategory, setAddCategory] = useState<string>('')
@@ -114,28 +116,31 @@ const Tasks: NextPage = () => {
   }
 
   return (
-    <div className="flex gap-1 w-full flex-row justify-start min-h-screen mb-20">
+    <motion.div className="flex gap-1 w-full flex-row justify-start min-h-screen">
       {(categories.data && categories.data.length !== 0) ? categories.data!
-        .map(category =>
+        .map((category, i) =>
           <Category
             key={category.id}
             name={category.name}
+            index={i}
             onAdd={() => handleAdd(category.id)}
           >
-            {items && items.filter(task => task.categoryId === category.id).map(task => (
-              <Task
-                key={task.id}
-                id={task.id}
-                title={task.title!}
-                description={task.description!}
-                onEdit={handleEdit}
-                onDelete={() => handleDelete(task.id)}
-                isNew={task.new}
-                categoryId={task.categoryId}
-                onCategoryChange={handleCategoryChange}
-              />
-            )
-            )}
+            {items && items.filter(task => task.categoryId === category.id)
+              .map((task, i) => (
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  title={task.title!}
+                  description={task.description!}
+                  index={i}
+                  onEdit={handleEdit}
+                  onDelete={() => handleDelete(task.id)}
+                  isNew={task.new}
+                  categoryId={task.categoryId}
+                  onCategoryChange={handleCategoryChange}
+                />
+              )
+              )}
           </Category>
         )
         : <div className="text-xl pt-20 sm:pt-0 flex flex-col gap-4 items-center justify-start sm:justify-center text-white w-full min-h-screen">
@@ -149,8 +154,25 @@ const Tasks: NextPage = () => {
           </Link>
         </div>
       }
-    </div>
+    </motion.div>
   );
 };
 
 export default Tasks;
+
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session }
+  }
+}

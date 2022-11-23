@@ -4,15 +4,21 @@ import { useSession } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 import { trpc } from "../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion"
+import { useRouter } from "next/router";
 
 const Register: NextPage = () => {
-  const session = useSession()
+  const { data: session } = useSession()
   const registerUser = trpc.useMutation(["user.register"]);
   const usernameRef = useRef<HTMLInputElement>(null)
   const getUser = trpc.useQuery(["user.get", { username: usernameRef?.current?.value || '' }]);
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordAgainRef = useRef<HTMLInputElement>(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const router = useRouter();
+
+  if (session?.user) {
+    router.push('/dashboard');
+  }
 
   const signUp = async (e: any) => {
     setErrorMessage(() => '');
@@ -40,54 +46,60 @@ const Register: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col pt-20 md:pt-0 justify-start md:justify-center items-center min-h-screen">
-      <Form header="Sign up">
-        {errorMessage !== '' &&
-          <motion.div
-            initial={{
-              opacity: 0,
-              translateY: '-20px'
-            }}
-            animate={{
-              opacity: 1,
-              translateY: 0
-            }}
-            exit={{
-              opacity: 0,
-              translateY: '-20px'
-            }}
-            className="duration-150 w-[16rem] text-center text-red-600 word-break py-5"
-          >
-            {errorMessage}
-          </motion.div>
-        }
-        <Input
-          ref={usernameRef}
-          label="Username"
-          type="text"
-        />
-        <Input
-          ref={passwordRef}
-          label="Password"
-          type="password"
-        />
-        <Input
-          ref={passwordAgainRef}
-          label="Verify Password"
-          type="password"
-        />
+    <AnimatePresence exitBeforeEnter>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="flex flex-col pt-20 md:pt-0 justify-start md:justify-center items-center min-h-screen">
+        <Form header="Sign up">
+          {errorMessage !== '' &&
+            <motion.div
+              initial={{
+                opacity: 0,
+                translateY: '-20px'
+              }}
+              animate={{
+                opacity: 1,
+                translateY: 0
+              }}
+              exit={{
+                opacity: 0,
+                translateY: '-20px'
+              }}
+              className="duration-150 w-[16rem] text-center text-red-600 word-break py-5"
+            >
+              {errorMessage}
+            </motion.div>
+          }
+          <Input
+            ref={usernameRef}
+            label="Username"
+            type="text"
+          />
+          <Input
+            ref={passwordRef}
+            label="Password"
+            type="password"
+          />
+          <Input
+            ref={passwordAgainRef}
+            label="Verify Password"
+            type="password"
+          />
 
-        <div className="p-4"></div>
-        <Button
-          handleClick={e => signUp(e)}
-          text="Sign up"
-          otherText="Already have an account?"
-          otherLink="/login"
-          otherLinkText="Sign in"
-        />
+          <div className="p-4"></div>
+          <Button
+            handleClick={e => signUp(e)}
+            text="Sign up"
+            otherText="Already have an account?"
+            otherLink="/login"
+            otherLinkText="Sign in"
+          />
 
-      </Form>
-    </div>
+        </Form>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

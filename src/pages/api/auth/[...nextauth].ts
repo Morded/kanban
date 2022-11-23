@@ -9,12 +9,21 @@ import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: '/login',
+    signOut: '/login',
+  },
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    jwt(params) {
+      // update token
+      if (params.user?.role) {
+        params.token.role = params.user.role;
       }
-      return session;
+      // return final_token
+      return params.token;
     },
   },
   // Configure one or more authentication providers
@@ -25,28 +34,42 @@ export const authOptions: NextAuthOptions = {
     //   clientSecret: env.GOOGLE_SECRET
     // }),
     CredentialsProvider({
-      id: "domain-login",
-      name: "Account",
-      credentials: {
-        username: { label: "Username", type: "text " },
-        password: { label: "Password", type: "password" },
-      },
+      credentials: {},
       async authorize(credentials, req) {
+        const { username, password } = credentials as {
+          username: string;
+          password: string;
+        };
+        // if (!credentials) return null
+        // return { id: '2342', name: 'Morded' }
+
+        const user = prisma.user.findFirst({
+          where: {
+            AND: [
+              {
+                name: {
+                  equals: username,
+                },
+              },
+              {
+                password: {
+                  equals: password,
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            name: true
+          },
+        })
+
+        console.log(user)
+        if (user) {
+        return user
+        } else {
         return null
-        // if (credentials === undefined) return
-
-        // const user = prisma.user.findFirst({
-        //   where: {
-        //     name: credentials.username,
-        //     password: credentials.password
-        //   }
-        // })
-
-        // if (user) {
-        //   return user
-        // } else {
-        //   return null
-        // }
+        }
 
       },
     }),

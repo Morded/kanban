@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useState } from 'react'
+import { getCsrfToken, signIn } from "next-auth/react";
 
 type InputProps = {
   label: string,
@@ -16,6 +17,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type }, r
         ref={ref}
         className="py-2 px-4 focus:outline-none glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 sm:focus:scale-110"
         type={`${type}`}
+        name={label}
         value={value}
         onChange={e => setValue(e.target.value)}
       ></input>
@@ -51,8 +53,10 @@ const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink
 
   return (
     <>
-      <button onClick={handleClick} className="hover:shadow-md text-2xl text-white rounded-xl shadow-md py-3 px-6 transition-all duration-200 drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
+      <button onClick={handleClick}
+        className="hover:shadow-md text-2xl text-white rounded-xl shadow-md py-3 px-6 transition-all duration-200 drop-shadow-2xl font-bold rounded-3xl bg-gradient-to-r from-violet-800 to-fuchsia-800
                 duration-300 transition-all ease-in-out hover:from-violet-700 hover:to-fuchsia-700 hover:scale-105">
+
         {text}
       </button>
       {other()}
@@ -62,10 +66,11 @@ const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink
 
 type FormProps = {
   children: React.ReactNode,
+  csrfToken?: string;
   header: string
 };
 
-const Form: React.FC<FormProps> = ({ children, header }) => {
+const Form: React.FC<FormProps> = ({ children, csrfToken, header }) => {
   return (
     <div className='px-2'>
       <h1 className="text-5xl md:text-[4rem] leading-normal font-extrabold text-white">
@@ -73,7 +78,8 @@ const Form: React.FC<FormProps> = ({ children, header }) => {
       </h1>
       <div className="p-6"></div>
 
-      <form className="flex flex-col" method="post">
+      <form className="flex flex-col" method="post" onSubmit={() => signIn('credentials', { redirect: false, name: 'Morded', password: 'kisakos98' })}>
+        <input name='csrfToken' type='hidden' defaultValue={csrfToken} />
         {children}
       </form>
     </div>
@@ -81,3 +87,11 @@ const Form: React.FC<FormProps> = ({ children, header }) => {
 };
 
 export { Input, Button, Form }
+
+export async function getServerSideProps(context: any) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  }
+}

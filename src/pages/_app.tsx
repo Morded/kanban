@@ -8,6 +8,7 @@ import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 import Layout from "../components/layouts/main"
+import { AnimatePresence } from "framer-motion";
 
 const MyApp: AppType = ({
   Component,
@@ -16,11 +17,13 @@ const MyApp: AppType = ({
 }) => {
 
   return (
-    <SessionProvider session={session}>
-      <Layout router={router}>
-        <Component {...pageProps} key={router.route} />
-      </Layout>
-    </SessionProvider>
+    <AnimatePresence mode="wait">
+      <SessionProvider session={session}>
+        <Layout router={router}>
+          <Component {...pageProps} key={router.route} />
+        </Layout>
+      </SessionProvider>
+    </AnimatePresence>
   );
 };
 

@@ -5,9 +5,10 @@ import AddNewButton from "../components/addNew";
 import { useEffect, useState } from "react";
 import Modal from "../components/modal";
 import CategoryCard from "../components/categoryCard"
-import { Reorder } from "framer-motion"
+import { Reorder, motion } from "framer-motion"
 import { Category } from "@prisma/client";
 import _app from "./_app";
+import { getSession } from "next-auth/react";
 
 const Categories: NextPage = () => {
   const utils = trpc.useContext();
@@ -161,16 +162,43 @@ const Categories: NextPage = () => {
   }
 
   return (
-    <div className="container pt-40 w-96 h-96 text-gray-200 flex flex-col gap-1 w-full items-start min-h-screen px-4">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      className="container pt-40 w-96 h-96 text-gray-200 flex flex-col gap-1 w-full items-start min-h-screen px-4">
       <h2 className="text-xl font-extrabold ml-1 self-start">Categories</h2>
       <AddNewButton
         text="category"
         onAdd={() => handleAdd()}
       />
       <div className="flex flex-col gap-4 w-full text-white">
-        <Reorder.Group axis="y" values={items} onReorder={setItems} className="flex flex-col gap-4 w-full text-white">
-          {items && items.map(category =>
-            <Reorder.Item key={category.id} value={category}>
+        <Reorder.Group
+          axis="y"
+          values={items}
+          onReorder={setItems}
+          className="flex flex-col gap-4 w-full text-white"
+        >
+          {items && items.map((category, i) =>
+            <Reorder.Item
+              initial={{
+                opacity: 0,
+                translateY: '10px'
+              }}
+              animate={{
+                opacity: 1,
+                translateY: 0
+              }}
+              transition={{
+                type: 'spring',
+                delay: 0.1 * i
+              }}
+              key={category.id}
+              value={category}
+            >
               <CategoryCard
                 key={category.id}
                 order={category.order}
@@ -209,8 +237,25 @@ const Categories: NextPage = () => {
         <p>If you delete this column, all the tasks under this category will be deleted as well.</p>
 
       </Modal>
-    </div >
+    </motion.div >
   );
 };
 
 export default Categories;
+
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session }
+  }
+}

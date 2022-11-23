@@ -2,7 +2,9 @@ import { IconType } from "react-icons";
 import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link";
 import { RiMenu4Line, RiCloseLine } from "react-icons/ri";
-import { FiColumns, FiGrid, FiLayout, FiLogOut } from "react-icons/fi";
+import { FiColumns, FiGrid, FiLayout, FiLogIn, FiLogOut, FiPlus, FiPlusCircle, FiUser, FiUserPlus } from "react-icons/fi";
+import { motion } from "framer-motion"
+import { useSession, signOut } from "next-auth/react"
 
 const mediumWidth = 767;
 
@@ -61,6 +63,7 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [width, setWidth] = useState(0);
   const menuRef = useRef(null);
+  const { data: session, status } = useSession()
   useOutsideCloser(menuRef);
 
   function useOutsideCloser(ref: any) {
@@ -93,8 +96,22 @@ const Navigation = () => {
 
   return (
     <>
-      <nav ref={menuRef} className={`flex z-50 flex-col md:items-center md:justify-center md:min-h-screen text-base ${width < mediumWidth ? "absolute" : ""} ${(isOpen === true && width < mediumWidth) ? "bg-black bg-opacity-80 md:bg-inherit w-3/4 min-h-screen" : ''}`}>
-        <ul className="md:w-16 w-full mt-5 md:mt-0 md:top-auto gap-5 transition-all duration-300 text-white md:pl-2 flex flex-col">
+      <nav
+        ref={menuRef}
+        className={`flex z-50 flex-col md:items-center md:justify-center md:min-h-screen text-base 
+        ${width < mediumWidth ? "absolute" : ""} 
+        ${(isOpen === true && width < mediumWidth) ? "bg-black bg-opacity-80 md:bg-inherit w-3/4 min-h-screen" : ''}`}
+      >
+        <motion.ul
+          initial={{
+            opacity: 0,
+            translateX: '-10px'
+          }}
+          animate={{
+            opacity: 1,
+            translateX: '0px'
+          }}
+          className="md:w-16 w-full mt-5 md:mt-0 md:top-auto gap-5 transition-all duration-300 text-white md:pl-2 flex flex-col">
           {width < mediumWidth &&
             <NavButton
               onClick={() => setIsOpen(!isOpen)}
@@ -104,7 +121,8 @@ const Navigation = () => {
             />
           }
 
-          {(isOpen === true || width >= mediumWidth) &&
+          {(isOpen === true || width >= mediumWidth &&
+            session?.user) ?
             <>
               <NavButton
                 label="Dashboard"
@@ -128,11 +146,25 @@ const Navigation = () => {
                 label="Sign out"
                 icon={FiLogOut}
                 href="logout"
+                onClick={() => { signOut(); setIsOpen(false) }}
+              />
+            </>
+            : <>
+              <NavButton
+                label="Sign in"
+                icon={FiLogIn}
+                href="login"
+                onClick={() => setIsOpen(false)}
+              />
+              <NavButton
+                label="Sign up"
+                icon={FiUser}
+                href="register"
                 onClick={() => setIsOpen(false)}
               />
             </>
           }
-        </ul>
+        </motion.ul>
       </nav>
     </>
   )

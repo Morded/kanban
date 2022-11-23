@@ -9,6 +9,7 @@ type TaskProps = {
   id: string;
   title: string;
   description?: string;
+  index: number;
   onEdit: (id: string, title: string, description: string, isNew: boolean) => void;
   onDelete: () => void;
   isNew: boolean;
@@ -16,7 +17,7 @@ type TaskProps = {
   onCategoryChange: (id: string, newCategoryId: string) => void;
 };
 
-export const Task = ({ id, title, description, onEdit, onDelete, isNew, categoryId, onCategoryChange }: TaskProps) => {
+export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange }: TaskProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [actualTitle, setActualTitle] = useState(title)
   const [actualDesc, setActualDesc] = useState(description)
@@ -43,18 +44,18 @@ export const Task = ({ id, title, description, onEdit, onDelete, isNew, category
       <motion.div
         layout
         initial={{
-          scale: 0.9,
+          translateY: '10px',
           opacity: 0,
         }}
         animate={{
-          scale: 1,
+          translateY: '0px',
           opacity: 100,
         }}
         exit={{
-          scale: 0.9,
+          translateY: '10px',
           opacity: 0,
         }}
-        transition={{ type: "spring" }}
+        transition={{ type: "spring", delay: 0.2 * index }}
         key={id}
         className={`relative flex flex-col rounded-lg
         text-white w-full border border-slate-800 
@@ -78,7 +79,7 @@ export const Task = ({ id, title, description, onEdit, onDelete, isNew, category
           />
         </div>
 
-        <div className="flex flex-row items-center px-3 py-2 justify-between w-full border-t-2 text-slate-500 border-slate-800">
+        <div className="flex flex-row items-center px-3 py-2 justify-between w-full text-slate-500 border-slate-800">
           <div className="flex gap-4">
             <button
               title={isEditing ? "Done editing" : "Edit"}

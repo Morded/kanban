@@ -38,40 +38,52 @@ const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonP
         {isOpen &&
           <motion.div
             key="modal"
+            initial={{
+              translateX: '-100%',
+            }}
             animate={{
               backgroundColor: "rgba(0, 0, 0, 0.8)",
               boxShadow: "1px 1px 6px rgba(0, 0, 0, 0.2)",
               height: '13.5rem',
-              width: 'auto',
+              // width: 'auto',
               opacity: 10,
               translateX: '-55%',
               translateY: '-95%',
+              // overflowY: 'auto'
+            }}
+            whileHover={{
               overflowY: 'auto'
             }}
             exit={{
               backgroundColor: "rgba(0, 0, 0, 0)",
               boxShadow: "1px 1px 6px rgba(0, 0, 0, 0)",
-              height: 0,
-              width: 0,
-              opacity: 0
+              // height: 0,
+              // width: 0,
+              opacity: 0,
+              translateX: '-100%',
             }}
-            className="absolute overflow-hidden h-0 w-0 opacity-0 rounded-xl rounded-br-none border border-slate-700 text-white text-lg bg-black bg-opacity-20">
+            className="absolute overflow-hidden opacity-0 rounded-xl rounded-br-none border border-slate-700 text-white text-lg bg-black bg-opacity-20">
             {categories.data && categories.data
-              .map(category =>
+              .map((category, i) =>
                 <motion.button
                   key={category.id}
                   onClick={() => onClick(id, category.id)}
                   initial={{
                     opacity: 0,
+                    translateY: '20px',
                   }}
                   animate={{
-                    opacity: 100,
+                    opacity: 1,
+                    translateY: '0px',
+                  }}
+                  transition={{
+                    delay: 0.1 * i
                   }}
                   exit={{ opacity: 0 }}
                   disabled={category.id === categoryId}
                   className={`
                   p-3 border-b last:border-b-0 border-slate-600 w-[12rem] opacity-0
-                  font-bold w-content ${category.id === categoryId ? 'text-slate-600' : 'hover:text-violet-700'}
+                  font-bold w-content ${category.id === categoryId ? 'text-slate-700' : 'hover:text-violet-500'}
                 `}>
                   {category.name}
                 </motion.button>

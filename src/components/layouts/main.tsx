@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { NextRouter } from "next/router";
 import React from 'react';
-import { FiColumns, FiGrid, FiLayout, FiLogOut } from "react-icons/fi";
-import { Navigation, NavButton } from '../nav'
+import { Navigation } from '../nav'
 
 type MainProps = {
   children: React.ReactNode,
@@ -33,3 +32,4 @@ const Main: React.FC<MainProps> = ({ children }) => {
 }
 
 export default Main;
+

@@ -54,7 +54,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
 
   return (
     <div className={`flex flex-row gap-3 p-4 justify-between 
-      items-center w-full border rounded border-slate-700 glassmorph-dark
+      items-center w-full border rounded border-slate-800 glassmorph-dark
         hover:border-violet-700 transition-all duration-100 ease-in-out
         ${isEditing ? 'border-lime-700' : ''}
         ${!isActiveNow ? 'text-gray-500' : ''}
@@ -78,8 +78,8 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
           <Switch
             checked={isActiveNow}
             onChange={(checked) => { setIsActiveNow(() => checked); setActiveChanged(true) }}
-            onColor="#86d3ff"
-            onHandleColor="#2693e6"
+            onColor="#c8b1fb"
+            onHandleColor="#8b5cf6"
             handleDiameter={20}
             uncheckedIcon={false}
             checkedIcon={false}
