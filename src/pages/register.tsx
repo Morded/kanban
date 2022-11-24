@@ -18,7 +18,7 @@ const Register: NextPage = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter();
   const createCategory = trpc.useMutation(['category.createCategory']);
-  const { userId } = useUserId(true);
+  const { userId } = useUserId();
   const getUser = trpc.useQuery(["user.get", { username: usernameRef?.current?.value || '' }]);
 
   if (session?.user) {
