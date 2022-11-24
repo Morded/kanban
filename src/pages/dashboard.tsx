@@ -6,10 +6,19 @@ import { trpc } from "../utils/trpc";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";
 import useUserId from "../components/hooks/useUserId";
+import { useRouter } from "next/router";
 
 const Dashboard: NextPage = () => {
   const [quote, setQuote] = useState<{ author: string, content: string }>()
-  const { userId } = useUserId();
+  const router = useRouter();
+  const { userId, isLoading } = useUserId();
+
+  if (!isLoading) {
+    if (userId === '') {
+      router.push('/login')
+    }
+  }
+
   const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
   const taskCount = trpc.useQuery(["task.getCountByCategory", { userId: userId }]);
   const [noCategories, setNoCategories] = useState(true);
@@ -19,6 +28,8 @@ const Dashboard: NextPage = () => {
       await utils.invalidateQueries(["category.getAllActive"]);
     }
   });
+
+
 
   const fetchRandomQuote = async () => {
     await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
