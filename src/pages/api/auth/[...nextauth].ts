@@ -42,9 +42,7 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        // if (!username || !password) return null
-
-        const user = prisma.user.findFirst({
+        const user = prisma.user.findFirstOrThrow({
           where: {
             name: {
               equals: username,
@@ -59,7 +57,6 @@ export const authOptions: NextAuthOptions = {
           },
         })
 
-        console.log(user)
         if (user) {
           return user
         } else {

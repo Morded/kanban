@@ -9,6 +9,9 @@ export const userRouter = createRouter()
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.user.findFirst({
+        select: {
+          id: true
+        },
         where: {
           name: input.username
         },
