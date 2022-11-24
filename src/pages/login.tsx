@@ -1,16 +1,21 @@
 import type { NextPage } from "next";
 import React, { FormEventHandler, useState } from "react"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 
 const Login: NextPage = () => {
+  const { data: session } = useSession()
   const [userInfo, setUserInfo] = useState({ name: '', password: '' })
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('')
   const getUser = trpc.useQuery(["user.get", { username: userInfo.name || '' }]);
+
+  if (session?.user) {
+    router.push('/dashboard');
+  }
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     setErrorMessage(() => '');

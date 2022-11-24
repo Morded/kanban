@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { motion } from "framer-motion"
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const initial = {
   opacity: 0,
@@ -19,6 +21,12 @@ const animateButton = {
 }
 
 const Home: NextPage = () => {
+  const { data: session } = useSession()
+  const router = useRouter();
+
+  if (session?.user) {
+    router.push('/dashboard');
+  }
   return (
     <div className="flex flex-col pt-20 sm:pt-0 justify-start sm:justify-center items-center w-full min-h-screen text-center">
       <motion.h1
