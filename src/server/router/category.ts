@@ -115,3 +115,47 @@ export const categoryRouter = createRouter()
       })
     }
   })
+  .mutation('createDefaults', {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.category.createMany({
+        data: [
+          {
+            userId: input.userId,
+            name: 'To do',
+            default: true,
+            order: 0,
+            new: false,
+          },
+          {
+            userId: input.userId,
+            name: 'In progress',
+            default: true,
+            order: 1,
+            new: false,
+          },
+          {
+            userId: input.userId,
+            name: 'Testing',
+            default: true,
+            order: 2,
+            new: false,
+          },
+          {
+            userId: input.userId,
+            name: 'Done',
+            default: true,
+            order: 3,
+            new: false,
+          },
+        ],
+        skipDuplicates: true,
+      })
+        .catch((error) => {
+          return error.code
+        });
+    }
+  })

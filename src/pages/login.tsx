@@ -12,15 +12,13 @@ const Login: NextPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    console.log(userInfo)
-
     await signIn("credentials", {
       username: userInfo.name,
       password: userInfo.password,
       redirect: false,
       callbackUrl: '/dashboard',
     })
-      .then(data => console.log(data))
+      .then(data => router.push(data?.url ?? '/dashboard'))
   };
 
   return (

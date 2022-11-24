@@ -5,12 +5,20 @@ import { useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";
+import useUserId from "../components/hooks/useUserId";
 
 const Dashboard: NextPage = () => {
   const [quote, setQuote] = useState<{ author: string, content: string }>()
-  const categories = trpc.useQuery(["category.getAllActive"]);
-  const taskCount = trpc.useQuery(["task.getCountByCategory"]);
+  const { userId } = useUserId();
+  const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
+  const taskCount = trpc.useQuery(["task.getCountByCategory", { userId: userId }]);
   const [noCategories, setNoCategories] = useState(true);
+  const utils = trpc.useContext();
+  const createDefaults = trpc.useMutation(["category.createDefaults"], {
+    async onSuccess() {
+      await utils.invalidateQueries(["category.getAllActive"]);
+    }
+  });
 
   const fetchRandomQuote = async () => {
     await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
@@ -28,7 +36,7 @@ const Dashboard: NextPage = () => {
   }, [categories])
 
   useEffect(() => {
-    fetchRandomQuote();
+    createDefaults.mutateAsync({ userId: userId }).then(() => fetchRandomQuote());
   }, [])
 
   return (

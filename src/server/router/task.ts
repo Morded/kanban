@@ -3,8 +3,15 @@ import { z } from "zod";
 
 export const taskRouter = createRouter()
   .query("getAll", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
       return await ctx.prisma.task.findMany({
+        where: {
+          userId: input.userId,
+        },
         orderBy: {
           order: 'asc'
         }
@@ -12,8 +19,15 @@ export const taskRouter = createRouter()
     },
   })
   .query("getCountByCategory", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
       return await ctx.prisma.task.groupBy({
+        where: {
+          userId: input.userId,
+        },
         by: ['categoryId'],
         _count: {
           _all: true
@@ -25,11 +39,15 @@ export const taskRouter = createRouter()
     input: z
       .object({
         categoryId: z.string().cuid(),
+        userId: z.string(),
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.task.aggregate({
+        where: {
+          categoryId: input.categoryId,
+          userId: input.userId,
+        },
         _max: { order: true },
-        where: { categoryId: input.categoryId }
       })
         .catch((error) => {
           return error
@@ -42,6 +60,7 @@ export const taskRouter = createRouter()
         title: z.string(),
         description: z.string(),
         categoryId: z.string().cuid(),
+        userId: z.string(),
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.task.create({
@@ -51,6 +70,7 @@ export const taskRouter = createRouter()
           order: 1000000,
           new: false,
           categoryId: input.categoryId,
+          userId: input.userId,
         }
       });
     }

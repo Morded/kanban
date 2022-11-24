@@ -91,11 +91,6 @@ const Navigation = () => {
     handleResize();
   }, [])
 
-  useEffect(() => {
-    console.log(isOpen)
-
-  }, [isOpen])
-
   const handleSignOut = async () => {
     await signOut({ redirect: false, callbackUrl: '/login' })
       .then(data => router.push(data.url));

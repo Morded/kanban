@@ -8,18 +8,20 @@ import { Task as PTask } from "@prisma/client";
 import Link from "next/link";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";
+import useUserId from "../components/hooks/useUserId";
 
 const Tasks: NextPage = () => {
   const [addCategory, setAddCategory] = useState<string>('')
   const [items, setItems] = useState<PTask[]>([]);
+  const { userId } = useUserId();
 
   const utils = trpc.useContext();
   const handleSuccess = async () => {
     await utils.invalidateQueries(["task.getAll"]);
   }
 
-  const tasks = trpc.useQuery(["task.getAll"]);
-  const categories = trpc.useQuery(["category.getAllActive"]);
+  const tasks = trpc.useQuery(["task.getAll", { userId: userId }]);
+  const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
 
   const deleteTask = trpc.useMutation(['task.deleteTask'], {
     async onSuccess() { handleSuccess() }
@@ -54,6 +56,7 @@ const Tasks: NextPage = () => {
         description: '',
         new: true,
         categoryId: addCategory,
+        userId: userId,
       }
 
       const itemsWithNew = [...items, newItem]
@@ -90,6 +93,7 @@ const Tasks: NextPage = () => {
         title: title,
         description: description,
         categoryId: addCategory,
+        userId: userId
       });
 
       setAddCategory('');
