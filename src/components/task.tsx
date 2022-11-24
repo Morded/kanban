@@ -64,7 +64,7 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
       `}
       >
         <div className="p-2">
-          <TextareaAutosize value={actualTitle} onChange={e => setActualTitle(e.target.value)}
+          <TextareaAutosize ref={titleRef} value={actualTitle} onChange={e => setActualTitle(e.target.value)}
             readOnly={!isEditing}
             className={`text-xl bg-inherit p-2 font-bold first-letter:uppercase focus:outline-none w-full resize-none text-ellipsis `}
           />

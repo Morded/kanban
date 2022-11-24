@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Task as PTask } from "@prisma/client";
 import Link from "next/link";
 import { motion } from "framer-motion"
-import { getSession } from "next-auth/react";
 import useUserId from "../components/hooks/useUserId";
 
 const Tasks: NextPage = () => {
