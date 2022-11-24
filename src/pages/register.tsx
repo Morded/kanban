@@ -5,9 +5,6 @@ import { Form, Button, Input } from "../components/form"
 import { trpc } from "../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter } from "next/router";
-import useUserId from "../components/hooks/useUserId";
-
-const DEFAULT_CATEGORIES = ['To do', 'In progress', 'Testing', 'Done']
 
 const Register: NextPage = () => {
   const { data: session } = useSession()
@@ -17,8 +14,6 @@ const Register: NextPage = () => {
   const passwordAgainRef = useRef<HTMLInputElement>(null)
   const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter();
-  const createCategory = trpc.useMutation(['category.createCategory']);
-  const { userId } = useUserId();
   const getUser = trpc.useQuery(["user.get", { username: usernameRef?.current?.value || '' }]);
 
   if (session?.user) {
@@ -59,19 +54,8 @@ const Register: NextPage = () => {
       callbackUrl: '/dashboard',
     })
       .then(data => {
-        // createDefaultCategories();
         router.push(data?.url || '/dashboard');
       })
-  }
-
-  const createDefaultCategories = () => {
-    DEFAULT_CATEGORIES.map(category => {
-      createCategory.mutate({
-        userId: userId,
-        name: category,
-        isDefault: true,
-      })
-    })
   }
 
   return (

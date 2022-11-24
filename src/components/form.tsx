@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react'
-import { getCsrfToken, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 type InputProps = {
   label: string,
@@ -8,21 +9,35 @@ type InputProps = {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type }, ref) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = (e: any) => {
+    e.preventDefault();
+    setShowPassword(prev => !prev)
+  }
 
   return (
-    <>
+    <div className="flex flex-col relative">
       <label className="text-sl text-gray-400 pb-2">{label}</label>
       <input
         ref={ref}
-        className="py-2 px-4 focus:outline-none glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 sm:focus:scale-110"
-        type={`${type}`}
+        className="py-2 px-4 focus:outline-none peer glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 sm:focus:scale-110"
+        type={`${showPassword ? 'text' : type}`}
         name={label}
         value={value}
         onChange={e => setValue(e.target.value)}
       ></input>
+      {type === 'password' &&
+        <button
+          className='text-gray-400 p-3 border border-transparent hover:text-white absolute -right-9 top-[2rem] transition-all ease-in-out peer-focus:-right-8 peer-focus:text-xl'
+          onClick={e => handleShowPassword(e)}
+        >
+          {showPassword === true ? <FiEyeOff /> : <FiEye />}
+        </button>
+      }
       <div className="p-2"></div>
-    </>
+    </div>
   );
 });
 
@@ -66,11 +81,10 @@ const Button: React.FC<ButtonProps> = ({ handleClick, text, otherText, otherLink
 
 type FormProps = {
   children: React.ReactNode,
-  csrfToken?: string;
   header: string
 };
 
-const Form: React.FC<FormProps> = ({ children, csrfToken, header }) => {
+const Form: React.FC<FormProps> = ({ children, header }) => {
   return (
     <div className='px-2'>
       <h1 className="text-5xl md:text-[4rem] leading-normal font-extrabold text-white">
@@ -79,7 +93,6 @@ const Form: React.FC<FormProps> = ({ children, csrfToken, header }) => {
       <div className="p-6"></div>
 
       <form className="flex flex-col" method="post" onSubmit={() => signIn('credentials', { redirect: false, name: 'Morded', password: 'kisakos98' })}>
-        <input name='csrfToken' type='hidden' defaultValue={csrfToken} />
         {children}
       </form>
     </div>
@@ -87,11 +100,3 @@ const Form: React.FC<FormProps> = ({ children, csrfToken, header }) => {
 };
 
 export { Input, Button, Form }
-
-export async function getServerSideProps(context: any) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
-}
