@@ -1,29 +1,26 @@
 import type { NextPage } from "next";
-import React, { FormEventHandler, useEffect, useState } from "react"
-import { useSession, signIn, signOut, getSession } from "next-auth/react"
+import React, { FormEventHandler, useState } from "react"
+import { signIn } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter } from "next/router";
 
-const Login: NextPage<{ csrfToken: string }> = ({ csrfToken }) => {
-  const { data: session } = useSession()
+const Login: NextPage = () => {
   const [userInfo, setUserInfo] = useState({ name: '', password: '' })
   const router = useRouter();
-
-  if (session?.user) {
-    router.push('/dashboard');
-  }
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const res = await signIn("credentials", {
-      email: userInfo.name,
-      password: userInfo.password,
-      redirectUrl: '/dashboard',
-    });
+    console.log(userInfo)
 
-    console.log(res);
+    await signIn("credentials", {
+      username: userInfo.name,
+      password: userInfo.password,
+      redirect: false,
+      callbackUrl: '/dashboard',
+    })
+      .then(data => console.log(data))
   };
 
   return (
@@ -75,20 +72,3 @@ const Login: NextPage<{ csrfToken: string }> = ({ csrfToken }) => {
 };
 
 export default Login;
-
-// export async function getServerSideProps(context: any) {
-//   const session = await getSession(context)
-
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: '/dashboard',
-//         permanent: false,
-//       },
-//     }
-//   }
-
-//   return {
-//     props: { session }
-//   }
-// }

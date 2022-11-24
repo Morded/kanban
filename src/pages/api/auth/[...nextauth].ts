@@ -21,6 +21,7 @@ export const authOptions: NextAuthOptions = {
       // update token
       if (params.user?.role) {
         params.token.role = params.user.role;
+        params.token.id = params.user.id;
       }
       // return final_token
       return params.token;
@@ -40,23 +41,17 @@ export const authOptions: NextAuthOptions = {
           username: string;
           password: string;
         };
-        // if (!credentials) return null
-        // return { id: '2342', name: 'Morded' }
+
+        // if (!username || !password) return null
 
         const user = prisma.user.findFirst({
           where: {
-            AND: [
-              {
-                name: {
-                  equals: username,
-                },
-              },
-              {
-                password: {
-                  equals: password,
-                },
-              },
-            ],
+            name: {
+              equals: username,
+            },
+            password: {
+              equals: password,
+            },
           },
           select: {
             id: true,
@@ -66,9 +61,9 @@ export const authOptions: NextAuthOptions = {
 
         console.log(user)
         if (user) {
-        return user
+          return user
         } else {
-        return null
+          return null
         }
 
       },

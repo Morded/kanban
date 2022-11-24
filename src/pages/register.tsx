@@ -1,10 +1,12 @@
 import type { NextPage } from "next";
 import React, { useRef, useState } from "react"
-import { useSession } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 import { trpc } from "../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter } from "next/router";
+
+const DEFAULT_CATEGORIES = ['To do', 'In progress', 'Testing', 'Done']
 
 const Register: NextPage = () => {
   const { data: session } = useSession()
@@ -15,6 +17,7 @@ const Register: NextPage = () => {
   const passwordAgainRef = useRef<HTMLInputElement>(null)
   const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter();
+  const createCategory = trpc.useMutation(['category.createCategory']);
 
   if (session?.user) {
     router.push('/dashboard');
@@ -40,9 +43,33 @@ const Register: NextPage = () => {
       username: username,
       password: password,
     })
+      .then(() => handleSignIn(username, password))
       .catch((error) => {
         setErrorMessage(JSON.parse(error.message)[0].message)
       })
+  }
+
+  const handleSignIn = async (username: string, password: string) => {
+    await signIn("credentials", {
+      username: username,
+      password: password,
+      redirect: false,
+      callbackUrl: '/dashboard',
+    })
+      .then(data => {
+        createDefaultCategories();
+        router.push(data?.url || '/dashboard');
+      })
+  }
+
+  const createDefaultCategories = () => {
+    DEFAULT_CATEGORIES.map(category => {
+      createCategory.mutate({
+        userId: '',
+        name: category,
+        isDefault: true,
+      })
+    })
   }
 
   return (

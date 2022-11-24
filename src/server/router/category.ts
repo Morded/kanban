@@ -3,8 +3,15 @@ import { z } from "zod";
 
 export const categoryRouter = createRouter()
   .query("getAll", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
       return await ctx.prisma.category.findMany({
+        where: {
+          userId: input.userId,
+        },
         orderBy: {
           order: 'asc'
         }
@@ -12,10 +19,14 @@ export const categoryRouter = createRouter()
     },
   })
   .query("getAllActive", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
       return await ctx.prisma.category.findMany({
         where: {
-          active: true
+          userId: input.userId,
         },
         orderBy: {
           order: 'asc'
@@ -24,10 +35,17 @@ export const categoryRouter = createRouter()
     },
   })
   .query("getMaxOrder", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
       return await ctx.prisma.category.aggregate({
         _max: {
           order: true,
+        },
+        where: {
+          userId: input.userId,
         }
       })
     }
@@ -35,12 +53,16 @@ export const categoryRouter = createRouter()
   .mutation('createCategory', {
     input: z
       .object({
+        userId: z.string(),
         name: z.string(),
+        isDefault: z.boolean().optional().default(false),
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.category.create({
         data: {
+          userId: input.userId,
           name: input.name,
+          default: input.isDefault,
           order: 1000000,
           new: false,
         },

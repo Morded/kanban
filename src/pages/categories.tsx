@@ -9,12 +9,15 @@ import { Reorder, motion } from "framer-motion"
 import { Category } from "@prisma/client";
 import _app from "./_app";
 import { getSession } from "next-auth/react";
+import useUserId from "../components/hooks/useUserId";
 
 const Categories: NextPage = () => {
   const utils = trpc.useContext();
   const handleSuccess = async () => await utils.invalidateQueries(["category.getAll"]);
   const [items, setItems] = useState<Category[]>([]);
-  const categories = trpc.useQuery(["category.getAll"]);
+  const { userId } = useUserId();
+
+  const categories = trpc.useQuery(["category.getAll", { userId: userId }]);
   const [uniqueConflictName, setUniqueConflictName] = useState('')
   const [isReordering, setIsReordering] = useState(false)
   const [isNewItem, setIsNewItem] = useState(false)
@@ -76,7 +79,8 @@ const Categories: NextPage = () => {
         name: '',
         default: false,
         active: true,
-        new: true
+        new: true,
+        userId: userId,
       }
 
       const itemsWithNew = [...items, newItem]
@@ -95,7 +99,8 @@ const Categories: NextPage = () => {
             name: item.name,
             default: item.default,
             active: item.active,
-            new: item.new
+            new: item.new,
+            userId: userId,
           }
         } else {
           return item
@@ -127,7 +132,7 @@ const Categories: NextPage = () => {
       setUniqueConflictName(name);
     } else {
       if (isNew === true) {
-        await createCategory.mutateAsync({ name: name })
+        await createCategory.mutateAsync({ userId: '', name: name })
         setIsNewItem(false);
       } else {
         await editCategory

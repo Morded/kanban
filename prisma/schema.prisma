@@ -20,11 +20,14 @@ datasource db {
 model Category {
     id      String  @id @default(cuid())
     order   Int      
-    name    String  @unique
+    name    String  
     default Boolean @default(false)
     active  Boolean @default(true)
     new     Boolean @default(true)
+    userId  String?
+    user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
     tasks   Task[]
+    @@unique([name, userId])
 }
 
 model Task { 
@@ -35,6 +38,8 @@ model Task {
     description String?
     new         Boolean   @default(true)
     category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    userId      String?
+    user        User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Example {
@@ -77,6 +82,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    categories    Category[]
+    tasks         Task[]
 }
 
 model VerificationToken {

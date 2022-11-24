@@ -2,9 +2,10 @@ import { IconType } from "react-icons";
 import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link";
 import { RiMenu4Line, RiCloseLine } from "react-icons/ri";
-import { FiColumns, FiGrid, FiLayout, FiLogIn, FiLogOut, FiPlus, FiPlusCircle, FiUser, FiUserPlus } from "react-icons/fi";
+import { FiColumns, FiGrid, FiLayout, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
 import { motion } from "framer-motion"
 import { useSession, signOut } from "next-auth/react"
+import { useRouter } from "next/router";
 
 const mediumWidth = 767;
 
@@ -63,7 +64,8 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [width, setWidth] = useState(0);
   const menuRef = useRef(null);
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
+  const router = useRouter();
   useOutsideCloser(menuRef);
 
   function useOutsideCloser(ref: any) {
@@ -93,6 +95,13 @@ const Navigation = () => {
     console.log(isOpen)
 
   }, [isOpen])
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false, callbackUrl: '/login' })
+      .then(data => router.push(data.url));
+
+    setIsOpen(false);
+  }
 
   return (
     <>
@@ -145,8 +154,7 @@ const Navigation = () => {
               <NavButton
                 label="Sign out"
                 icon={FiLogOut}
-                href="logout"
-                onClick={() => { signOut(); setIsOpen(false) }}
+                onClick={() => handleSignOut()}
               />
             </>
             : <>
