@@ -132,7 +132,7 @@ const Categories: NextPage = () => {
       setUniqueConflictName(name);
     } else {
       if (isNew === true) {
-        await createCategory.mutateAsync({ userId: '', name: name })
+        await createCategory.mutateAsync({ userId: userId, name: name })
         setIsNewItem(false);
       } else {
         await editCategory

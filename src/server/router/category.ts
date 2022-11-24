@@ -27,6 +27,7 @@ export const categoryRouter = createRouter()
       return await ctx.prisma.category.findMany({
         where: {
           userId: input.userId,
+          active: true
         },
         orderBy: {
           order: 'asc'

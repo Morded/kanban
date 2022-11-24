@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FiGrid } from "react-icons/fi";
 import { trpc } from "../utils/trpc";
+import useUserId from "./hooks/useUserId";
 
 type ChangeCategoryButtonProps = {
   id: string,
@@ -10,7 +11,8 @@ type ChangeCategoryButtonProps = {
 }
 
 const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonProps) => {
-  const categories = trpc.useQuery(["category.getAllActive"]);
+  const { userId } = useUserId()
+  const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
   const [isOpen, setIsOpen] = useState(false);
   const componentRef = useRef(null);
   useOutsideCloser(componentRef);
