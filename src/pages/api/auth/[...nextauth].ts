@@ -8,7 +8,6 @@ import { prisma } from "../../../server/db/client";
 // import { env } from "../../../env/server.mjs";
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
   session: {
     strategy: "jwt",
   },
@@ -18,22 +17,15 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     jwt(params) {
-      // update token
       if (params.user?.role) {
         params.token.role = params.user.role;
         params.token.id = params.user.id;
       }
-      // return final_token
       return params.token;
     },
   },
-  // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_ID,
-    //   clientSecret: env.GOOGLE_SECRET
-    // }),
     CredentialsProvider({
       credentials: {},
       async authorize(credentials, req) {
@@ -65,7 +57,6 @@ export const authOptions: NextAuthOptions = {
 
       },
     }),
-    // ...add more providers here
   ],
 };
 

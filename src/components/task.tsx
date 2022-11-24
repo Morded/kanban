@@ -60,7 +60,7 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
         className={`relative flex flex-col rounded-lg
         text-white w-full border border-slate-800 
         hover:border-violet-700 glassmorph-dark h-content
-        ${isEditing === true ? 'border-lime-600' : ''}
+        ${isEditing === true ? 'border-fuchsia-700' : ''}
       `}
       >
         <div className="p-2">
@@ -83,7 +83,7 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
           <div className="flex gap-4">
             <button
               title={isEditing ? "Done editing" : "Edit"}
-              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-lime-600"}`}
+              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-fuchsia-700"}`}
               onClick={() => setIsEditing(prev => !prev)}
             >{isEditing ? <RiCheckLine /> : <FiEdit3 />}</button>
             <button
@@ -95,11 +95,13 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
             </button>
           </div>
 
-          <ChangeCategoryButton
-            id={id}
-            categoryId={categoryId}
-            onClick={onCategoryChange}
-          />
+          {isNew === false &&
+            <ChangeCategoryButton
+              id={id}
+              categoryId={categoryId}
+              onClick={onCategoryChange}
+            />
+          }
 
 
         </div>

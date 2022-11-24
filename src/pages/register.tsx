@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React, { useRef, useState } from "react"
+import React, { FormEventHandler, useRef, useState } from "react"
 import { useSession, signIn } from "next-auth/react"
 import { Form, Button, Input } from "../components/form"
 import { trpc } from "../utils/trpc";
@@ -9,24 +9,22 @@ import { useRouter } from "next/router";
 const Register: NextPage = () => {
   const { data: session } = useSession()
   const registerUser = trpc.useMutation(["user.register"]);
-  const usernameRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const passwordAgainRef = useRef<HTMLInputElement>(null)
+  const [userInfo, setUserInfo] = useState({ name: '', password: '', passwordAgain: '' })
   const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter();
-  const getUser = trpc.useQuery(["user.get", { username: usernameRef?.current?.value || '' }]);
+  const getUser = trpc.useQuery(["user.get", { username: userInfo.name || '' }]);
 
   if (session?.user) {
     router.push('/dashboard');
   }
 
-  const signUp = async (e: any) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     setErrorMessage(() => '');
     e.preventDefault();
 
-    const username = usernameRef.current?.value;
-    const password = passwordRef.current?.value;
-    const passwordAgain = passwordAgainRef.current?.value;
+    const username = userInfo.name;
+    const password = userInfo.password;
+    const passwordAgain = userInfo.passwordAgain;
 
     if (!username) { setErrorMessage('Username is required'); return }
     if (!password) { setErrorMessage('Password is required'); return }
@@ -44,7 +42,7 @@ const Register: NextPage = () => {
       .catch((error) => {
         setErrorMessage(JSON.parse(error.message)[0].message)
       })
-  }
+  };
 
   const handleSignIn = async (username: string, password: string) => {
     await signIn("credentials", {
@@ -58,14 +56,18 @@ const Register: NextPage = () => {
       })
   }
 
+  const handleUsernameChange = (value: string) => setUserInfo({ ...userInfo, name: value });
+  const handlePasswordChange = (value: string) => setUserInfo({ ...userInfo, password: value });
+  const handlePasswordAgainChange = (value: string) => setUserInfo({ ...userInfo, passwordAgain: value });
+
   return (
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode="wait">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="flex flex-col pt-20 md:pt-0 justify-start md:justify-center items-center min-h-screen">
-        <Form header="Sign up">
+        <Form header="Sign up" onSubmit={handleSubmit}>
           {errorMessage !== '' &&
             <motion.div
               initial={{
@@ -86,27 +88,26 @@ const Register: NextPage = () => {
             </motion.div>
           }
           <Input
-            ref={usernameRef}
             label="Username"
             type="text"
+            onChange={handleUsernameChange}
           />
           <Input
-            ref={passwordRef}
             label="Password"
             type="password"
+            onChange={handlePasswordChange}
           />
           <Input
-            ref={passwordAgainRef}
             label="Verify Password"
             type="password"
+            onChange={handlePasswordAgainChange}
           />
 
           <div className="p-4"></div>
           <Button
-            handleClick={e => signUp(e)}
             text="Sign up"
             otherText="Already have an account?"
-            otherLink="/login"
+            otherLink="login"
             otherLinkText="Sign in"
           />
 

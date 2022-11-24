@@ -24,9 +24,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
   const originalValue = name;
 
   useEffect(() => {
-    console.log(isNew, ' ', order)
     if (isNew || (order === -2)) {
-      console.log(order)
       setIsEditing(true);
     }
   }, [])
@@ -56,7 +54,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
     <div className={`flex flex-row gap-3 p-4 justify-between 
       items-center w-full border rounded border-slate-800 glassmorph-dark
         hover:border-violet-700 transition-all duration-100 ease-in-out
-        ${isEditing ? 'border-lime-700' : ''}
+        ${isEditing ? 'border-fuchsia-700' : ''}
         ${!isActiveNow ? 'text-gray-500' : ''}
         ${(isInConflict || order === -2) ? 'border-red-900' : ''}
       `}>
@@ -93,7 +91,7 @@ const CategoryCard = ({ id, name, order, isDefault, isActive, onEdit, onDelete, 
           <>
             <button
               title={isEditing ? "Done editing" : "Edit"}
-              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-lime-700"}`}
+              className={`text-xl transition-all duration-100 ease-in-out hover:text-violet-700 ${isEditing && "text-fuchsia-700"}`}
               onClick={() => setIsEditing(prev => !prev)}
             >{isEditing ? <RiCheckLine /> : <FiEdit3 />}</button>
             <button

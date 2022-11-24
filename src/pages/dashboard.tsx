@@ -37,11 +37,11 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     createDefaults.mutateAsync({ userId: userId }).then(() => fetchRandomQuote());
-  }, [])
+  }, [userId])
 
   return (
     <div className="flex flex-col p-4 gap-20 h-full pt-24 items-center justify-start md:justify-center md:pt-0 items-start w-full text-white">
-      {quote &&
+      {(quote && userId !== '') &&
         <>
           <motion.div
             initial={{ opacity: 0 }}
