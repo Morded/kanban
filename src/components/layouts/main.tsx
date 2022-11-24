@@ -20,7 +20,7 @@ const Main: React.FC<MainProps> = ({ children }) => {
       <div className="flex flex-row">
         <Navigation />
 
-        <main className="w-full flex flex-col items-center justify-start min-h-screen p-2 md:p-0">
+        <main className="w-full flex flex-col items-center justify-start min-h-screen">
           {children}
         </main>
       </div>

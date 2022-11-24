@@ -9,7 +9,6 @@ type InputProps = {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type, onChange }, ref) => {
-  const [value, setValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = (e: any) => {
@@ -25,14 +24,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, type, onC
         className="py-2 px-4 focus:outline-none peer glassmorph-dark text-white border border-slate-800 rounded transition-transform ease-in-out focus:border-purple-700 sm:focus:scale-110"
         type={`${showPassword ? 'text' : type}`}
         name={label}
-        // value={value}
-        // onChange={({ target }) => setValue(target.value)}
         onChange={({ target }) => onChange(target.value)}
       ></input>
       {
         type === 'password' &&
         <a
-          className='cursor-pointer text-gray-400 p-3 border border-transparent hover:text-white absolute -right-9 top-[2rem] transition-all ease-in-out peer-focus:-right-8 peer-focus:text-xl'
+          className='cursor-pointer text-gray-400 p-3 border border-transparent hover:text-white absolute -right-9 top-[2rem] transition-all ease-in-out md:peer-focus:-right-8 md:peer-focus:text-xl'
           onClick={e => handleShowPassword(e)}
         >
           {showPassword === true ? <FiEyeOff /> : <FiEye />}

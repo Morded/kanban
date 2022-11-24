@@ -125,46 +125,50 @@ const Navigation = () => {
             />
           }
 
-          {(isOpen === true || width >= mediumWidth &&
-            session?.user) ?
+          {(isOpen === true || width >= mediumWidth) &&
             <>
-              <NavButton
-                label="Dashboard"
-                icon={FiLayout}
-                href="dashboard"
-                onClick={() => setIsOpen(false)}
-              />
-              <NavButton
-                label="Tasks"
-                icon={FiColumns}
-                href="tasks"
-                onClick={() => setIsOpen(false)}
-              />
-              <NavButton
-                label="Categories"
-                icon={FiGrid}
-                href="categories"
-                onClick={() => setIsOpen(false)}
-              />
-              <NavButton
-                label="Sign out"
-                icon={FiLogOut}
-                onClick={() => handleSignOut()}
-              />
-            </>
-            : <>
-              <NavButton
-                label="Sign in"
-                icon={FiLogIn}
-                href="login"
-                onClick={() => setIsOpen(false)}
-              />
-              <NavButton
-                label="Sign up"
-                icon={FiUser}
-                href="register"
-                onClick={() => setIsOpen(false)}
-              />
+              {session?.user ?
+                <>
+                  <NavButton
+                    label="Dashboard"
+                    icon={FiLayout}
+                    href="dashboard"
+                    onClick={() => setIsOpen(false)}
+                  />
+                  <NavButton
+                    label="Tasks"
+                    icon={FiColumns}
+                    href="tasks"
+                    onClick={() => setIsOpen(false)}
+                  />
+                  <NavButton
+                    label="Categories"
+                    icon={FiGrid}
+                    href="categories"
+                    onClick={() => setIsOpen(false)}
+                  />
+                  <NavButton
+                    label="Sign out"
+                    icon={FiLogOut}
+                    href="#"
+                    onClick={() => handleSignOut()}
+                  />
+                </>
+                : <>
+                  <NavButton
+                    label="Sign in"
+                    icon={FiLogIn}
+                    href="login"
+                    onClick={() => setIsOpen(false)}
+                  />
+                  <NavButton
+                    label="Sign up"
+                    icon={FiUser}
+                    href="register"
+                    onClick={() => setIsOpen(false)}
+                  />
+                </>
+              }
             </>
           }
         </motion.ul>
