@@ -15,7 +15,11 @@ const Tags = () => {
       <AddNewButton text="tag" onAdd={() => setIsOpen(true)} />
 
       {tags.data && tags.data.map(tag =>
-        <Tag name={tag.name} color={tag.color} />
+        <Tag
+          key={tag.id}
+          name={tag.name}
+          color={tag.color}
+        />
       )}
 
       <Modal
