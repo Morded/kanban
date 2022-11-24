@@ -9,13 +9,11 @@ import Link from "next/link";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";
 import useUserId from "../components/hooks/useUserId";
-import AddNewButton from "../components/addNew";
-import Tags from "../components/tag";
 
 const Tasks: NextPage = () => {
   const [addCategory, setAddCategory] = useState<string>('')
   const [items, setItems] = useState<PTask[]>([]);
-  const { userId } = useUserId();
+  const userId = useUserId();
 
   const utils = trpc.useContext();
   const handleSuccess = async () => {
@@ -167,19 +165,3 @@ const Tasks: NextPage = () => {
 export default Tasks;
 
 
-export async function getServerSideProps(context: any) {
-  const session = await getSession(context)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { session }
-  }
-}

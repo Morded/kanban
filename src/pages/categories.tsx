@@ -15,7 +15,7 @@ const Categories: NextPage = () => {
   const utils = trpc.useContext();
   const handleSuccess = async () => await utils.invalidateQueries(["category.getAll"]);
   const [items, setItems] = useState<Category[]>([]);
-  const { userId } = useUserId();
+  const userId = useUserId();
 
   const categories = trpc.useQuery(["category.getAll", { userId: userId }]);
   const [uniqueConflictName, setUniqueConflictName] = useState('')
@@ -247,20 +247,3 @@ const Categories: NextPage = () => {
 };
 
 export default Categories;
-
-export async function getServerSideProps(context: any) {
-  const session = await getSession(context)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { session }
-  }
-}

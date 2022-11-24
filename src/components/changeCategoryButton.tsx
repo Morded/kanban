@@ -11,7 +11,7 @@ type ChangeCategoryButtonProps = {
 }
 
 const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonProps) => {
-  const { userId } = useUserId()
+  const userId = useUserId()
   const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
   const [isOpen, setIsOpen] = useState(false);
   const componentRef = useRef(null);
@@ -47,11 +47,9 @@ const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonP
               backgroundColor: "rgba(0, 0, 0, 0.8)",
               boxShadow: "1px 1px 6px rgba(0, 0, 0, 0.2)",
               height: '13.5rem',
-              // width: 'auto',
               opacity: 10,
               translateX: '-55%',
               translateY: '-95%',
-              // overflowY: 'auto'
             }}
             whileHover={{
               overflowY: 'auto'
@@ -59,8 +57,6 @@ const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonP
             exit={{
               backgroundColor: "rgba(0, 0, 0, 0)",
               boxShadow: "1px 1px 6px rgba(0, 0, 0, 0)",
-              // height: 0,
-              // width: 0,
               opacity: 0,
               translateX: '-100%',
             }}
