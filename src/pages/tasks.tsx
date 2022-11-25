@@ -45,26 +45,26 @@ const Tasks: NextPage = () => {
   }, [tasks.data])
 
   const handleAdd = async (categoryId: string) => {
-    console.log(isEditing)
-    if (isEditing === true) {
-      // await createTask.mutateAsync({
-      //   title: title,
-      //   description: description,
-      //   categoryId: addCategory,
-      //   userId: userId
-      // });
+    // console.log(isEditing)
+    // if (isEditing === true) {
+    //   // await createTask.mutateAsync({
+    //   //   title: title,
+    //   //   description: description,
+    //   //   categoryId: addCategory,
+    //   //   userId: userId
+    //   // });
 
-      // setAddCategory('');
-      doCreateTask(categoryId);
-    } else {
-      setAddCategory(categoryId);
-    }
+    //   // setAddCategory('');
+    //   doCreateTask(categoryId);
+    // } else {
+    setAddCategory(categoryId);
+    // }
 
   }
 
   useEffect(() => {
     if (addCategory !== '') {
-      setIsEditing(() => true);
+      // setIsEditing(() => true);
 
       const newItem: PTask = {
         id: '',
@@ -106,15 +106,15 @@ const Tasks: NextPage = () => {
 
   const handleEdit = async (id: string, title: string, description: string, isNew: boolean) => {
     if (isNew === true) {
-      // await createTask.mutateAsync({
-      //   title: title,
-      //   description: description,
-      //   categoryId: addCategory,
-      //   userId: userId
-      // });
+      await createTask.mutateAsync({
+        title: title,
+        description: description,
+        categoryId: addCategory,
+        userId: userId
+      });
 
-      // setAddCategory('');
-      doCreateTask();
+      setAddCategory('');
+      // doCreateTask();
     } else {
       await editTask.mutateAsync({
         id: id,
@@ -179,8 +179,6 @@ const Tasks: NextPage = () => {
                   isNew={task.new}
                   categoryId={task.categoryId}
                   onCategoryChange={handleCategoryChange}
-                  onTitleChange={handleTitleChange}
-                  onDescChange={handleDescChange}
                 />
               )
               )}

@@ -15,11 +15,9 @@ type TaskProps = {
   isNew: boolean;
   categoryId: string;
   onCategoryChange: (id: string, newCategoryId: string) => void;
-  onTitleChange: (title: string) => void;
-  onDescChange: (description: string) => void;
 };
 
-export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange, onTitleChange, onDescChange }: TaskProps) => {
+export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange }: TaskProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [actualTitle, setActualTitle] = useState(title)
   const [actualDesc, setActualDesc] = useState(description)
@@ -42,12 +40,10 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
 
   const handleTitleChange = (value: string) => {
     setActualTitle(value);
-    onTitleChange(actualTitle);
   }
 
   const handleDescChange = (value: string) => {
     setActualDesc(value);
-    onDescChange(actualDesc || '');
   }
 
   return (
