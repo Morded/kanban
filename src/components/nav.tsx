@@ -150,7 +150,6 @@ const Navigation = () => {
                   <NavButton
                     label="Sign out"
                     icon={FiLogOut}
-                    href="#"
                     onClick={() => handleSignOut()}
                   />
                 </>
