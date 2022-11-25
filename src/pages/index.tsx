@@ -22,7 +22,7 @@ const animateButton = {
 }
 
 const Home: NextPage = () => {
-  const userId = useUserId()
+  const userId = useUserId(true)
   const router = useRouter();
 
   if (userId) {
