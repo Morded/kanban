@@ -47,9 +47,16 @@ const NavButton = ({ label, icon, href, onClick, onlyMobile, isHamburger }: NavB
           :
           <button
             onClick={onClick}
-            className={`btn peer ${onlyMobile && 'md:hidden'} ${isHamburger === true && 'rounded-full ml-2'} `}
+            className={`btn peer w-full ${onlyMobile && 'md:hidden'} ${isHamburger === true && 'rounded-full ml-2 w-auto'} `}
           >
-            {React.createElement(icon)}
+            <div className={`flex gap-3 justify-start items-center w-full md:w-auto ${onlyMobile && 'md:hidden'}`}>
+              <div className={`pl-2 md:pl-0 ${isHamburger === true && 'pl-0'}`}>
+                {React.createElement(icon)}
+              </div>
+              {(label && width < mediumWidth) &&
+                <span className="text-lg text-left w-[5em]">{label}</span>
+              }
+            </div>
           </button>
       }
       {(label && width >= mediumWidth) &&
