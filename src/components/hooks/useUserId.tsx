@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 
-const useUserId = () => {
+const useUserId = (noRedirect?: boolean) => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -10,7 +10,7 @@ const useUserId = () => {
   const { data: user, isLoading } = trpc.useQuery(["user.get", { username: username }]);
 
   if (!isLoading) {
-    if (!user) {
+    if ((!noRedirect) && !user) {
       router.push('/login')
     }
   }
