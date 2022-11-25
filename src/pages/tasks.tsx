@@ -13,6 +13,8 @@ const Tasks: NextPage = () => {
   const [addCategory, setAddCategory] = useState<string>('')
   const [items, setItems] = useState<PTask[]>([]);
   const userId = useUserId();
+  const [editInfo, setEditInfo] = useState({ title: '', desc: '' })
+  const [isEditing, setIsEditing] = useState(false);
 
   const utils = trpc.useContext();
   const handleSuccess = async () => {
@@ -43,11 +45,27 @@ const Tasks: NextPage = () => {
   }, [tasks.data])
 
   const handleAdd = async (categoryId: string) => {
-    setAddCategory(categoryId);
+    console.log(isEditing)
+    if (isEditing === true) {
+      // await createTask.mutateAsync({
+      //   title: title,
+      //   description: description,
+      //   categoryId: addCategory,
+      //   userId: userId
+      // });
+
+      // setAddCategory('');
+      doCreateTask(categoryId);
+    } else {
+      setAddCategory(categoryId);
+    }
+
   }
 
   useEffect(() => {
     if (addCategory !== '') {
+      setIsEditing(() => true);
+
       const newItem: PTask = {
         id: '',
         order: -1,
@@ -88,14 +106,15 @@ const Tasks: NextPage = () => {
 
   const handleEdit = async (id: string, title: string, description: string, isNew: boolean) => {
     if (isNew === true) {
-      await createTask.mutateAsync({
-        title: title,
-        description: description,
-        categoryId: addCategory,
-        userId: userId
-      });
+      // await createTask.mutateAsync({
+      //   title: title,
+      //   description: description,
+      //   categoryId: addCategory,
+      //   userId: userId
+      // });
 
-      setAddCategory('');
+      // setAddCategory('');
+      doCreateTask();
     } else {
       await editTask.mutateAsync({
         id: id,
@@ -108,6 +127,22 @@ const Tasks: NextPage = () => {
     }
   }
 
+  const doCreateTask = async (categoryId?: string) => {
+    await createTask.mutateAsync({
+      title: editInfo.title,
+      description: editInfo.desc,
+      categoryId: addCategory,
+      userId: userId
+    });
+
+    setIsEditing(() => false);
+    if (categoryId) {
+      setAddCategory(categoryId);
+    } else {
+      setAddCategory('');
+    }
+  }
+
   const handleDelete = async (id: string) => {
     if (addCategory !== '') {
       const updatedItems = items.filter(item => item.id !== '');
@@ -117,6 +152,9 @@ const Tasks: NextPage = () => {
       await deleteTask.mutateAsync({ id: id });
     }
   }
+
+  const handleTitleChange = (value: string) => { setEditInfo({ ...editInfo, title: value }) }
+  const handleDescChange = (value: string) => { setEditInfo({ ...editInfo, desc: value }) }
 
   return (
     <motion.div className="flex gap-1 w-full flex-row justify-start min-h-screen">
@@ -141,6 +179,8 @@ const Tasks: NextPage = () => {
                   isNew={task.new}
                   categoryId={task.categoryId}
                   onCategoryChange={handleCategoryChange}
+                  onTitleChange={handleTitleChange}
+                  onDescChange={handleDescChange}
                 />
               )
               )}

@@ -15,9 +15,11 @@ type TaskProps = {
   isNew: boolean;
   categoryId: string;
   onCategoryChange: (id: string, newCategoryId: string) => void;
+  onTitleChange: (title: string) => void;
+  onDescChange: (description: string) => void;
 };
 
-export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange }: TaskProps) => {
+export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange, onTitleChange, onDescChange }: TaskProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [actualTitle, setActualTitle] = useState(title)
   const [actualDesc, setActualDesc] = useState(description)
@@ -37,6 +39,16 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
 
     titleRef.current?.focus();
   }, [isEditing]);
+
+  const handleTitleChange = (value: string) => {
+    setActualTitle(value);
+    onTitleChange(actualTitle);
+  }
+
+  const handleDescChange = (value: string) => {
+    setActualDesc(value);
+    onDescChange(actualDesc || '');
+  }
 
   return (
 
@@ -64,11 +76,11 @@ export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, c
       `}
       >
         <div className="p-2">
-          <TextareaAutosize ref={titleRef} value={actualTitle} onChange={e => setActualTitle(e.target.value)}
+          <TextareaAutosize ref={titleRef} value={actualTitle} onChange={({ target }) => handleTitleChange(target.value)}
             readOnly={!isEditing}
             className={`text-xl bg-inherit p-2 font-bold first-letter:uppercase focus:outline-none w-full resize-none text-ellipsis `}
           />
-          <TextareaAutosize value={actualDesc} onChange={e => setActualDesc(e.target.value)}
+          <TextareaAutosize value={actualDesc} onChange={({ target }) => handleDescChange(target.value)}
             placeholder="Press TAB or click here for desc..."
             readOnly={!isEditing}
             className={`

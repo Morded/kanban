@@ -3,6 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import useUserId from "../components/hooks/useUserId";
 
 const initial = {
   opacity: 0,
@@ -21,10 +22,10 @@ const animateButton = {
 }
 
 const Home: NextPage = () => {
-  const { data: session } = useSession()
+  const userId = useUserId()
   const router = useRouter();
 
-  if (session?.user) {
+  if (userId) {
     router.push('/dashboard');
   }
   return (
