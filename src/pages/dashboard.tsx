@@ -6,9 +6,10 @@ import { trpc } from "../utils/trpc";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";
 import useUserId from "../components/hooks/useUserId";
+import { Spinner } from "../components/spinner";
 
 const Dashboard: NextPage = () => {
-  const [quote, setQuote] = useState<{ author: string, content: string }>()
+  const [quote, setQuote] = useState<{ author: string, content: string }>();
   const userId = useUserId();
 
   const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
@@ -22,10 +23,13 @@ const Dashboard: NextPage = () => {
   });
 
   const fetchRandomQuote = async () => {
-    await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
-      const { author, content } = data.data;
-      setQuote({ author: author, content: content });
-    })
+    if (!quote) {
+      await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
+        const { author, content } = data.data;
+        setQuote({ author: author, content: content });
+      })
+
+    }
   }
 
   useEffect(() => {
@@ -37,12 +41,14 @@ const Dashboard: NextPage = () => {
   }, [categories])
 
   useEffect(() => {
-    createDefaults.mutateAsync({ userId: userId }).then(() => fetchRandomQuote());
+    fetchRandomQuote();
+    createDefaults.mutateAsync({ userId: userId });
   }, [userId])
+
 
   return (
     <div className="flex flex-col p-4 gap-20 h-full pt-24 items-center justify-start md:justify-center md:pt-0 items-start w-full text-white">
-      {(quote && userId !== '') &&
+      {(categories?.data && quote) ?
         <>
           <motion.div
             initial={{ opacity: 0 }}
@@ -107,6 +113,8 @@ const Dashboard: NextPage = () => {
             </div>
           </motion.div>
         </>
+        :
+        <Spinner show={noCategories} />
       }
     </div>
   );

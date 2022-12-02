@@ -56,6 +56,7 @@ export const categoryRouter = createRouter()
       .object({
         userId: z.string(),
         name: z.string(),
+        order: z.number(),
         isDefault: z.boolean().optional().default(false),
       }),
     async resolve({ ctx, input }) {
@@ -64,8 +65,8 @@ export const categoryRouter = createRouter()
           userId: input.userId,
           name: input.name,
           default: input.isDefault,
-          order: 1000000,
-          new: false,
+          order: input.order,
+          new: true,
         },
       })
         .catch((error) => {
