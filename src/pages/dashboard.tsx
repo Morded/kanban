@@ -12,8 +12,7 @@ const Dashboard: NextPage = () => {
   const [quote, setQuote] = useState<{ author: string, content: string }>();
   const userId = useUserId();
 
-  const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
-  const taskCount = trpc.useQuery(["task.getCountByCategory", { userId: userId }]);
+  const categories = trpc.useQuery(["category.taskCount", { userId: userId }]);
   const [noCategories, setNoCategories] = useState(true);
   const utils = trpc.useContext();
   const createDefaults = trpc.useMutation(["category.createDefaults"], {
@@ -75,27 +74,17 @@ const Dashboard: NextPage = () => {
                   <div className="flex flex-col justify-center flex-wrap items-center text-center text-xl md:flex-row gap-4 w-full">
                     {categories?.data &&
                       categories.data
-                        .filter(category => category.active === true)
                         .map(category =>
                           <div
                             key={category.id}
                             className={`py-6 min-w-[20rem] border-slate-700 rounded-xl
-                text-white flex flex-col glassmorph-dark
-              `}
+                              text-white flex flex-col glassmorph-dark
+                            `}
                           >
                             <p className="text-violet-500">{category.name}</p>
 
                             <span className="text-2xl font-bold">
-                              {
-                                taskCount.data && (taskCount.data
-                                  .filter(task => task.categoryId === category.id)
-                                  .length > 0
-                                  ? taskCount.data
-                                    .filter(task => task.categoryId === category.id)
-                                    .map(task => task._count._all
-                                    )
-                                  : 0
-                                )}
+                              {category._count.tasks ? category._count.tasks : 0}
                             </span>
                           </div>
                         )}
