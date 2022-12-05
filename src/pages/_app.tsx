@@ -48,7 +48,10 @@ export default withTRPC<AppRouter>({
             process.env.NODE_ENV === "development" ||
             (opts.direction === "down" && opts.result instanceof Error),
         }),
-        httpBatchLink({ url }),
+        httpBatchLink({
+          url,
+          maxBatchSize: 10,
+        }),
       ],
       url,
       transformer: superjson,

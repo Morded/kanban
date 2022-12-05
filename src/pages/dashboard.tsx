@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { motion } from "framer-motion"
 import { getSession } from "next-auth/react";

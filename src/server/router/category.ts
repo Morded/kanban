@@ -161,3 +161,25 @@ export const categoryRouter = createRouter()
         });
     }
   })
+  .query("taskCount", {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.category.findMany({
+        include: {
+          _count: {
+            select: { tasks: true }
+          }
+        },
+        where: {
+          userId: input.userId,
+          active: true
+        },
+        orderBy: {
+          order: 'asc'
+        }
+      });
+    },
+  })
