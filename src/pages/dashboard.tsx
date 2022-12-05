@@ -1,16 +1,15 @@
-import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { motion } from "framer-motion"
-import { getSession } from "next-auth/react";
 import useUserId from "../components/hooks/useUserId";
 import { Spinner } from "../components/spinner";
+import useQuote from "../components/hooks/useQuote";
 
 const Dashboard: NextPage = () => {
-  const [quote, setQuote] = useState<{ author: string, content: string }>();
   const userId = useUserId();
+  const quote = useQuote();
 
   const categories = trpc.useQuery(["category.taskCount", { userId: userId }]);
   const [noCategories, setNoCategories] = useState(true);
@@ -21,16 +20,6 @@ const Dashboard: NextPage = () => {
     }
   });
 
-  const fetchRandomQuote = async () => {
-    if (!quote) {
-      await axios.get('https://api.quotable.io/random', { params: { tags: 'technology' } }).then((data) => {
-        const { author, content } = data.data;
-        setQuote({ author: author, content: content });
-      })
-
-    }
-  }
-
   useEffect(() => {
     if (categories.data) {
       if (categories!.data!.length !== 0) {
@@ -40,10 +29,8 @@ const Dashboard: NextPage = () => {
   }, [categories])
 
   useEffect(() => {
-    fetchRandomQuote();
     createDefaults.mutateAsync({ userId: userId });
   }, [userId])
-
 
   return (
     <div className="flex flex-col p-4 gap-20 h-full pt-24 items-center justify-start md:justify-center md:pt-0 items-start w-full text-white">
