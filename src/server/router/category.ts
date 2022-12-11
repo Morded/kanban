@@ -35,6 +35,26 @@ export const categoryRouter = createRouter()
       });
     },
   })
+  .query("getTasks", {
+    input: z
+      .object({
+        userId: z.string(),
+      }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.category.findMany({
+        include: {
+          tasks: true
+        },
+        where: {
+          userId: input.userId,
+          active: true
+        },
+        orderBy: {
+          order: 'asc'
+        }
+      });
+    },
+  })
   .query("getMaxOrder", {
     input: z
       .object({

@@ -43,11 +43,11 @@ export const taskRouter = createRouter()
       }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.task.aggregate({
+        _max: { order: true },
         where: {
           categoryId: input.categoryId,
           userId: input.userId,
         },
-        _max: { order: true },
       })
         .catch((error) => {
           return error
@@ -57,20 +57,23 @@ export const taskRouter = createRouter()
   .mutation('createTask', {
     input: z
       .object({
+        userId: z.string(),
+        order: z.number(),
         title: z.string(),
         description: z.string(),
         categoryId: z.string().cuid(),
-        userId: z.string(),
       }),
     async resolve({ ctx, input }) {
+      const { userId, order, title, description, categoryId } = input
+
       return await ctx.prisma.task.create({
         data: {
-          title: input.title,
-          description: input.description,
-          order: 1000000,
-          new: false,
-          categoryId: input.categoryId,
-          userId: input.userId,
+          userId: userId,
+          order: order,
+          title: title,
+          description: description,
+          new: true,
+          categoryId: categoryId,
         }
       });
     }

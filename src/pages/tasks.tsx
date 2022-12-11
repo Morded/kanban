@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import { Task } from "../components/task";
 import { Category } from "../components/category";
 
 import { trpc } from "../utils/trpc";
@@ -9,180 +8,86 @@ import Link from "next/link";
 import { motion } from "framer-motion"
 import useUserId from "../components/hooks/useUserId";
 
+type TCategory = {
+  id: string
+  order: number
+  name: string
+  default: boolean
+  active: boolean
+  new: boolean
+  userId: string | null
+  tasks: PTask[]
+}
+
 const Tasks: NextPage = () => {
-  const [addCategory, setAddCategory] = useState<string>('')
-  const [items, setItems] = useState<PTask[]>([]);
+  const [items, setItems] = useState<TCategory[]>();
   const userId = useUserId();
-  const [editInfo, setEditInfo] = useState({ title: '', desc: '' })
-  const [isEditing, setIsEditing] = useState(false);
 
-  const utils = trpc.useContext();
-  const handleSuccess = async () => {
-    await utils.invalidateQueries(["task.getAll"]);
-  }
-
-  const tasks = trpc.useQuery(["task.getAll", { userId: userId }]);
-  const categories = trpc.useQuery(["category.getAllActive", { userId: userId }]);
-
-  const deleteTask = trpc.useMutation(['task.deleteTask'], {
-    async onSuccess() { handleSuccess() }
-  });
-  const editTask = trpc.useMutation(['task.editTask'], {
-    async onSuccess() { handleSuccess() }
-  });
-  const editTaskCategory = trpc.useMutation(['task.editTaskCategory'], {
-    async onSuccess() { handleSuccess() }
-  });
-  const createTask = trpc.useMutation(['task.createTask'], {
-    async onSuccess() { handleSuccess() }
-  });
-  const reorderTaskById = trpc.useMutation(['task.reorderTaskById']);
+  const categoryTasks = trpc.useQuery(["category.getTasks", { userId: userId }]);
+  const editTaskCategory = trpc.useMutation(['task.editTaskCategory']);
 
   useEffect(() => {
-    if (tasks.data) {
-      setItems(tasks.data);
+    if (!items && categoryTasks.data) {
+      setItems(categoryTasks.data);
     }
-  }, [tasks.data])
-
-  const handleAdd = async (categoryId: string) => {
-    // console.log(isEditing)
-    // if (isEditing === true) {
-    //   // await createTask.mutateAsync({
-    //   //   title: title,
-    //   //   description: description,
-    //   //   categoryId: addCategory,
-    //   //   userId: userId
-    //   // });
-
-    //   // setAddCategory('');
-    //   doCreateTask(categoryId);
-    // } else {
-    setAddCategory(categoryId);
-    // }
-
-  }
+  }, [categoryTasks.data])
 
   useEffect(() => {
-    if (addCategory !== '') {
-      // setIsEditing(() => true);
-
-      const newItem: PTask = {
-        id: '',
-        order: -1,
-        title: '',
-        description: '',
-        new: true,
-        categoryId: addCategory,
-        userId: userId,
-      }
-
-      const itemsWithNew = [...items, newItem]
-
-      setItems(itemsWithNew);
-    }
-  }, [addCategory])
-
-  useEffect(() => {
-    if (categories.data) {
-      categories.data!.map(category => {
-        items
-          .filter(item => item.categoryId === category.id)
-          .map((item, i) => {
-            reorderTaskById.mutate({
-              id: item.id,
-              order: i,
-            })
-          })
-      })
-    }
+    console.log(items)
   }, [items])
 
-  const handleCategoryChange = async (id: string, newCategoryId: string) => {
+  const getCurrentTask = (id: string, categoryId: string): PTask | undefined => {
+    let currTask: PTask | undefined = undefined
+    items && items
+      .filter(category => category.id === categoryId)
+      .map(category => {
+        if (category.tasks) {
+          category.tasks
+            .filter(task => task.id === id)
+            .map(task => { currTask = task })
+        }
+      }
+      )
+    return currTask
+  }
+
+  const handleCategoryChange = async (id: string, currCategoryId: string, newCategoryId: string) => {
+    if (!items) return null
+
+    const currentTask = getCurrentTask(id, currCategoryId);
+    if (!currentTask) return null
+
+    setItems(prev =>
+      prev && prev.map(category => {
+        if (category.id === currCategoryId) {
+          const updatedTasks = category.tasks.filter(task => task.id !== id)
+          category.tasks = { ...updatedTasks }
+        } else if (category.id === newCategoryId) {
+          category.tasks = [...category.tasks, currentTask]
+        }
+
+        return category
+      })
+    )
+
     await editTaskCategory.mutateAsync({
       id: id,
       categoryId: newCategoryId,
     })
   }
 
-  const handleEdit = async (id: string, title: string, description: string, isNew: boolean) => {
-    if (isNew === true) {
-      await createTask.mutateAsync({
-        title: title,
-        description: description,
-        categoryId: addCategory,
-        userId: userId
-      });
-
-      setAddCategory('');
-      // doCreateTask();
-    } else {
-      await editTask.mutateAsync({
-        id: id,
-        data: {
-          title: title,
-          description: description,
-          new: false,
-        }
-      });
-    }
-  }
-
-  const doCreateTask = async (categoryId?: string) => {
-    await createTask.mutateAsync({
-      title: editInfo.title,
-      description: editInfo.desc,
-      categoryId: addCategory,
-      userId: userId
-    });
-
-    setIsEditing(() => false);
-    if (categoryId) {
-      setAddCategory(categoryId);
-    } else {
-      setAddCategory('');
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (addCategory !== '') {
-      const updatedItems = items.filter(item => item.id !== '');
-      setItems(updatedItems);
-      setAddCategory('');
-    } else {
-      await deleteTask.mutateAsync({ id: id });
-    }
-  }
-
-  const handleTitleChange = (value: string) => { setEditInfo({ ...editInfo, title: value }) }
-  const handleDescChange = (value: string) => { setEditInfo({ ...editInfo, desc: value }) }
-
   return (
-    <motion.div className="flex gap-1 w-full flex-row justify-start min-h-screen">
-      {(categories.data && categories.data.length !== 0) ? categories.data!
-        .map((category, i) =>
+    <motion.div className="container flex gap-2 w-full flex-row justify-start min-h-screen">
+      {items ?
+        items.map((category, i) =>
           <Category
             key={category.id}
+            id={category.id}
             name={category.name}
             index={i}
-            onAdd={() => handleAdd(category.id)}
-          >
-            {items && items.filter(task => task.categoryId === category.id)
-              .map((task, i) => (
-                <Task
-                  key={task.id}
-                  id={task.id}
-                  title={task.title!}
-                  description={task.description!}
-                  index={i}
-                  onEdit={handleEdit}
-                  onDelete={() => handleDelete(task.id)}
-                  isNew={task.new}
-                  categoryId={task.categoryId}
-                  onCategoryChange={handleCategoryChange}
-                />
-              )
-              )}
-          </Category>
+            tasks={category.tasks}
+            onCategoryChange={handleCategoryChange}
+          />
         )
         : <div className="text-xl pt-20 sm:pt-0 flex flex-col gap-4 items-center justify-start sm:justify-center text-white w-full min-h-screen">
           <div>No active categories found.</div>

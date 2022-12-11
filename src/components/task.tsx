@@ -10,11 +10,11 @@ type TaskProps = {
   title: string;
   description?: string;
   index: number;
-  onEdit: (id: string, title: string, description: string, isNew: boolean) => void;
+  onEdit: (taskId: string, title: string, description: string, isNew: boolean) => void;
   onDelete: () => void;
   isNew: boolean;
   categoryId: string;
-  onCategoryChange: (id: string, newCategoryId: string) => void;
+  onCategoryChange: (id: string, currCategoryId: string, newCategoryId: string) => void;
 };
 
 export const Task = ({ id, title, description, index, onEdit, onDelete, isNew, categoryId, onCategoryChange }: TaskProps) => {

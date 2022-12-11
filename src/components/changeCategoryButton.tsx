@@ -7,7 +7,7 @@ import useUserId from "./hooks/useUserId";
 type ChangeCategoryButtonProps = {
   id: string,
   categoryId: string,
-  onClick: (id: string, newCategoryId: string) => void,
+  onClick: (id: string, currCategoryId: string, newCategoryId: string) => void,
 }
 
 const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonProps) => {
@@ -65,7 +65,7 @@ const ChangeCategoryButton = ({ id, categoryId, onClick }: ChangeCategoryButtonP
               .map((category, i) =>
                 <motion.button
                   key={category.id}
-                  onClick={() => onClick(id, category.id)}
+                  onClick={() => onClick(id, categoryId, category.id)}
                   initial={{
                     opacity: 0,
                     translateY: '20px',
