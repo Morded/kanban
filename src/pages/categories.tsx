@@ -101,7 +101,7 @@ const Categories: NextPage = () => {
   }, [items])
 
   const handleEdit = async (id: string, name: string, active: boolean, isNew: boolean) => {
-    let alreadyExists = doesAlreadyExist({ items, id, name });
+    const alreadyExists = doesAlreadyExist({ items, id, name });
 
     if (alreadyExists) {
       setUniqueConflictName(name);
